@@ -1,0 +1,70 @@
+language: python
+python:
+- '3.6'
+install:
+- locale-gen en_US.UTF-8
+- export LANG="en_US.UTF-8"
+- export LANGUAGE="en_US:en"
+- export LC_ALL="en_US.UTF-8"
+- sudo apt-get update
+- sudo apt-get install build-essential software-properties-common -y
+- sudo add-apt-repository ppa:jonathonf/python-3.6 -y
+- sudo apt-get update
+- sudo apt-get install python3.6 python3-pip -y
+- sudo apt-get install git -y
+- git clone https://github.com/Scille/parsec-build.git
+- cd parsec-build
+- git submodule update --init --recursive
+- pip3 install virtualenv
+- virtualenv venv -p python3.6
+- source venv/bin/activate
+- sudo apt-get install debhelper python3.6-dev python3-pytest libssl-dev -y
+- sudo apt-add-repository ppa:dh-virtualenv/daily -y
+- sudo apt-get update
+- sudo apt-get install dh-virtualenv libpq-dev libffi-dev fakeroot -y
+- sudo curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
+- sudo chmod +x /usr/local/bin/n
+- sudo n stable
+script:
+- cd parsec-cloud
+- git fetch
+- git checkout packaging
+- make deb
+- cd ../parsec-gui
+- git fetch
+- git checkout implement-api
+- npm install
+- npm run electron:deb
+- cd ..
+- mkdir build
+- cd build
+- cp ../parsec-cloud*.deb .
+- cp ../parsec-gui/dist/installers/parsec-gui*.deb .
+- mkdir parsec-cloud parsec-gui
+- dpkg-deb -R parsec-cloud_0.1-1_amd64.deb parsec-cloud
+- dpkg-deb -R parsec-gui_0.1.0_amd64.deb parsec-gui
+- rsync -a parsec-gui/usr/ parsec-cloud/usr/
+- ln -s /usr/share/python/parsec-cloud/bin/parsec parsec-cloud/usr/bin/parsec
+- mv parsec-cloud/usr/bin/parsec-gui parsec-cloud/usr/bin/parsec-electron
+- echo '#!/usr/bin/env sh' >> parsec-cloud/usr/bin/parsec-gui
+- echo 'parsec core -W 30 -H wss://parsec-cloud.herokuapp.com --debug &' >> parsec-cloud/usr/bin/parsec-gui
+- echo 'sleep 1' >> parsec-cloud/usr/bin/parsec-gui
+- echo 'core_pid=$!' >> parsec-cloud/usr/bin/parsec-gui
+- echo 'parsec-electron' >> parsec-cloud/usr/bin/parsec-gui
+- echo 'kill $core_pid' >> parsec-cloud/usr/bin/parsec-gui
+- chmod +x parsec-cloud/usr/bin/parsec-gui
+- depends_line=`grep "Depends:" parsec-gui/DEBIAN/control`
+- sed -i "7i $depends_line" parsec-cloud/DEBIAN/control
+- cloud_size=`grep "Installed-Size:" parsec-cloud/DEBIAN/control | cut -f 2 -d " "`
+- gui_size=`grep "Installed-Size:" parsec-gui/DEBIAN/control | cut -f 2 -d " "`
+- total_size=$((cloud_size + gui_size))
+- sed -i -- "s/$cloud_size/$total_size/g" parsec-cloud/DEBIAN/control
+- dpkg-deb -b parsec-cloud parsec_amd64.deb
+deploy:
+  provider: releases
+  api_key:
+    secure: dLgcnhYxGD5ZLpEidTACpk8KgYEm8vaet5mCt+ilmKCqOnzon3NtUc5U8YccDMEZd6BtEXGrLSqlTccYLihI0vI7rkUzgXRgrRscBOyGcauyIZBr6x3Z3XshekIME93KTsf9am4e0AMb0BLp9MiqoKONt+beLyaiv1UnmMhYyQpliwfuTwvw2meEzMsUba4XJhtgiHciZbmSQAqRo6PHlFnxb1LWHC6a7Twj1SSwx8RKBYob4PTMq0TTWJ/69hfybdNj7B0Qri9AoLEoG1HRdt4IaV9POoTuJGq6AedHU3gjImrF0gR8uyJKMh5c+b0LpXV24xpCEo18x4niUDdBO7d3PS6LGSoMzZfiFTXYaYwtfDuuoGugeTpYy4LbHFKgodkyxOssVxQUM2C69dgspZVQp0Fo5j7Z7FEXIo1tU3BaZURFQyDdKir8TvHc6FuVFnAcyUn13kMAqw7sY7mb9W2r+DVdThD9No9xr0oyo0ap8ISk/R2RqwlhEN3Dqhs8K4KKbATtOeyqNUe/IvvAq5ZeDpBAwrLOdTQBqcVWKrWZFu1BRSLJLna5LtQJ9jYMesE2TnTWypGKolu7VeMunyzbqy1jPbxk80DbntSHCTa7+zuF9jxy7ybdZXKCCDvH+iBI//cSeZFZeelq3B7+fdJnHJU8vhG33E3H6Dqe7YE=
+  file: parsec_amd64.deb
+  skip_cleanup: true
+  on:
+    repo: Scille/parsec-build
