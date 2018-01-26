@@ -1,0 +1,68 @@
+version: 0.0.1.{build}
+configuration: Release
+platform: All
+image: Visual Studio 2017
+environment:
+  nodejs_version: 9
+  python: C:\Python36-x64\python.exe
+  pip: C:\Python36-x64\Scripts\pip
+  makensis: C:\PROGRA~2\NSIS\makensis.exe
+cache:
+  - node_modules
+  - "%APPDATA%\npm-cache"
+install:
+  - ps: Install-Product node $env:nodejs_version
+  - git submodule update --init --recursive
+  - "%python% --version"
+  - node --version
+  - npm --version
+build_script:
+  - cd parsec-cloud
+  - git fetch
+  - git checkout trio
+
+  - "%pip% install ."
+  - dir
+  - dir Scripts
+  - parsec
+  - parsec fuse
+
+  - "%pip% install -r requirements.txt"
+  - "%pip% install cx_freeze idna"
+  - "%python% setup.py build"
+  - cd ../parsec-gui
+  - git fetch
+  - git checkout implement-api
+  - npm install
+  - npm run electron:win
+  - cd ..
+  - mkdir build
+  - move parsec-cloud\build\exe.win-amd64-3.6 build\core
+  - move parsec-gui\platforms\win\parsec-gui-win32-x64 build\gui
+  - echo cd build/core >> parsec.bat
+  - echo start /b cli.exe backend >> parsec.bat
+  - echo timeout 1 >> parsec.bat
+  - echo start /b cli.exe core --I-am-John >> parsec.bat
+  - echo timeout 1 >> parsec.bat
+  - echo cd ../../build/gui >> parsec.bat
+  - echo parsec-gui.exe >> parsec.bat
+  - echo taskkill /im cli.exe /f >> parsec.bat
+  - echo cd ../.. >> parsec.bat
+  - Bat_To_Exe_Converter.exe /bat parsec.bat /exe parsec.exe /invisible /icon parsec-gui/public/favicon.ico /x64
+  - "%makensis% parsec.nsi"
+test: off
+artifacts:
+  - path: Parsec_setup.exe
+    name: installer
+deploy:
+  release: parsec-v$(appveyor_build_version)
+  # description: 'Release description'
+  provider: GitHub
+  auth_token:
+    secure: y5xGHULS9oFoq68eKGzYdHF+tM4N0pCatrjXRey7tMki2rTEFNF2tFZmGt58ZI3T
+  artifact: installer
+  # draft: false
+  # prerelease: false
+  on:
+    branch: master
+    # appveyor_repo_tag: true
