@@ -66,9 +66,13 @@
 
 Section "Install"
 
-  ExecWait "msiexec /i winfsp-1.2.17346.msi /q"
-
   SetOutPath $INSTDIR
+
+  !define WINFSP winfsp-1.2.17346.msi
+
+  File ${WINFSP}
+  ExecWait "msiexec /i ${WINFSP} /q"
+  Delete $INSTDIR\${WINFSP}
 
   File /r build\*.*
 

@@ -44,21 +44,21 @@ build_script:
   - del build\parsec.bat
   - "%makensis% parsec.nsi"
 test: off
-# artifacts:
-#   - path: Parsec_setup.exe
-#     name: installer
-# deploy:
-#   release: parsec-v$(appveyor_build_version)
-#   # description: 'Release description'
-#   provider: GitHub
-#   auth_token:
-#     secure: y5xGHULS9oFoq68eKGzYdHF+tM4N0pCatrjXRey7tMki2rTEFNF2tFZmGt58ZI3T
-#   artifact: installer
-#   # draft: false
-#   # prerelease: false
-#   on:
-#     branch: master
-#     # appveyor_repo_tag: true
+artifacts:
+  - path: Parsec_setup.exe
+    name: installer
+deploy:
+  release: parsec-v$(appveyor_build_version)
+  # description: 'Release description'
+  provider: GitHub
+  auth_token:
+    secure: y5xGHULS9oFoq68eKGzYdHF+tM4N0pCatrjXRey7tMki2rTEFNF2tFZmGt58ZI3T
+  artifact: installer
+  # draft: false
+  # prerelease: false
+  on:
+    branch: master
+    # appveyor_repo_tag: true
 
 on_finish:
   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
