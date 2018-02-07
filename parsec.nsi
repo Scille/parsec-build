@@ -66,6 +66,8 @@
 
 Section "Install"
 
+  ExecWait "msiexec /i winfsp-1.2.17346.msi /q"
+
   SetOutPath $INSTDIR
 
   File /r build\*.*
