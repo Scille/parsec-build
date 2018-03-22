@@ -27,12 +27,8 @@ install:
 - sudo n stable
 script:
 - cd parsec-cloud
-- git fetch
-- git checkout packaging
 - make deb
 - cd ../parsec-gui
-- git fetch
-- git checkout implement-api
 - npm install
 - npm run electron:deb
 - cd ..
@@ -63,7 +59,7 @@ script:
 deploy:
   provider: releases
   api_key:
-    secure: dLgcnhYxGD5ZLpEidTACpk8KgYEm8vaet5mCt+ilmKCqOnzon3NtUc5U8YccDMEZd6BtEXGrLSqlTccYLihI0vI7rkUzgXRgrRscBOyGcauyIZBr6x3Z3XshekIME93KTsf9am4e0AMb0BLp9MiqoKONt+beLyaiv1UnmMhYyQpliwfuTwvw2meEzMsUba4XJhtgiHciZbmSQAqRo6PHlFnxb1LWHC6a7Twj1SSwx8RKBYob4PTMq0TTWJ/69hfybdNj7B0Qri9AoLEoG1HRdt4IaV9POoTuJGq6AedHU3gjImrF0gR8uyJKMh5c+b0LpXV24xpCEo18x4niUDdBO7d3PS6LGSoMzZfiFTXYaYwtfDuuoGugeTpYy4LbHFKgodkyxOssVxQUM2C69dgspZVQp0Fo5j7Z7FEXIo1tU3BaZURFQyDdKir8TvHc6FuVFnAcyUn13kMAqw7sY7mb9W2r+DVdThD9No9xr0oyo0ap8ISk/R2RqwlhEN3Dqhs8K4KKbATtOeyqNUe/IvvAq5ZeDpBAwrLOdTQBqcVWKrWZFu1BRSLJLna5LtQJ9jYMesE2TnTWypGKolu7VeMunyzbqy1jPbxk80DbntSHCTa7+zuF9jxy7ybdZXKCCDvH+iBI//cSeZFZeelq3B7+fdJnHJU8vhG33E3H6Dqe7YE=
+    secure: Ht/Toq2UyMtd+4Eji4x1XpLfdXKYZ0CD8RGdacPoTeMht/U24kYUE+fr0i7vEgbzrzpeDJUjKzhMZC1WNYBDEdA0GAbQsNYoGuAA1AWf5N6OOAs1E26viI6sbg/xplGfaFEBk0lRONCtDVnDGyFP45E9TeG6A92DPGNJw0l66HObhOIKNPXwh06g2/iFsJUXu6F6Xrwen5drFZ0H2IxtTF5y0297rv4P9qhXvNoorYhH4zcI8maGeYBnl6uj2jFu2AzwvWWl7UjMrFjWI6RAVs/lhBOkgsxaYIVKqJiUNtKdfzItmqJgB4HDy7OignPY60dC1/fPEtDdRVC5JwejQnvE5sk1YllRe3E8d46qTIIYzJHZ7kuWgW3Lj6Pnowzzn8FNfLTgOX5EviZG07KY92kSay15Jyfnhtuc7HAeNhxlsko1LFWRTyXWawPr4x725OG3dSlmA+xO1zDyyPIwiGBxNmfZlvYqhk71O++vby9Jpcjdy8c/0coxL/Xg2SmD9NDosE5TpavFLDi3dQiKyZdq6P8B7nOzmBI2SsMPWA86xdT0b8oufnuCL9mahbw74lSC8nuAXcaLr8kvzwWN1pcQ1HOArD+xu9zWixvFabDK1s+B5/maKtw0yxGMCmC2uDq+DD3NklJ4/ekBk2xA63iEmg24JfJSpwcXCUm9jIY=
   file: parsec_amd64.deb
   skip_cleanup: true
   on:
