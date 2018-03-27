@@ -1,6 +1,8 @@
 language: python
 python:
 - '3.6'
+env:
+- BACKEND_URL=tcp://ec2-54-229-174-79.eu-west-1.compute.amazonaws.com:6777
 install:
 - locale-gen en_US.UTF-8
 - export LANG="en_US.UTF-8"
@@ -43,7 +45,8 @@ script:
 - ln -s /usr/share/python/parsec-cloud/bin/parsec parsec-cloud/usr/bin/parsec
 - mv parsec-cloud/usr/bin/parsec-gui parsec-cloud/usr/bin/parsec-electron
 - echo '#!/usr/bin/env sh' >> parsec-cloud/usr/bin/parsec-gui
-- echo 'parsec core -W 30 -H wss://parsec-cloud.herokuapp.com --debug &' >> parsec-cloud/usr/bin/parsec-gui
+- echo "parsec core --debug --log-level=DEBUG --I-am-John -A ${BACKEND_URL} &" >>
+  parsec-cloud/usr/bin/parsec-gui
 - echo 'sleep 1' >> parsec-cloud/usr/bin/parsec-gui
 - echo 'core_pid=$!' >> parsec-cloud/usr/bin/parsec-gui
 - echo 'parsec-electron' >> parsec-cloud/usr/bin/parsec-gui
@@ -59,7 +62,7 @@ script:
 deploy:
   provider: releases
   api_key:
-    secure: Ht/Toq2UyMtd+4Eji4x1XpLfdXKYZ0CD8RGdacPoTeMht/U24kYUE+fr0i7vEgbzrzpeDJUjKzhMZC1WNYBDEdA0GAbQsNYoGuAA1AWf5N6OOAs1E26viI6sbg/xplGfaFEBk0lRONCtDVnDGyFP45E9TeG6A92DPGNJw0l66HObhOIKNPXwh06g2/iFsJUXu6F6Xrwen5drFZ0H2IxtTF5y0297rv4P9qhXvNoorYhH4zcI8maGeYBnl6uj2jFu2AzwvWWl7UjMrFjWI6RAVs/lhBOkgsxaYIVKqJiUNtKdfzItmqJgB4HDy7OignPY60dC1/fPEtDdRVC5JwejQnvE5sk1YllRe3E8d46qTIIYzJHZ7kuWgW3Lj6Pnowzzn8FNfLTgOX5EviZG07KY92kSay15Jyfnhtuc7HAeNhxlsko1LFWRTyXWawPr4x725OG3dSlmA+xO1zDyyPIwiGBxNmfZlvYqhk71O++vby9Jpcjdy8c/0coxL/Xg2SmD9NDosE5TpavFLDi3dQiKyZdq6P8B7nOzmBI2SsMPWA86xdT0b8oufnuCL9mahbw74lSC8nuAXcaLr8kvzwWN1pcQ1HOArD+xu9zWixvFabDK1s+B5/maKtw0yxGMCmC2uDq+DD3NklJ4/ekBk2xA63iEmg24JfJSpwcXCUm9jIY=
+    secure: CutotKaygqlJ3uHHhAwVt03E/zD+B7tDoZmvAdcSTOk8Ja1oBQX81f2q0T6i+cXncnzR4Don7WiUVMFkDkrCPx1GP6Dvy8dfP1868Y9Tn0c1Mg7aHvr6h0RKW6IbVZ2Y/CTAkCwKdS78IExmxn6yYWp5IaHTlDTDyoz93pDz9DUw1IRsaqS1tcaGkQW2V5iEFjNPqCdIHdzAh1Vra9mc7JLkIeozzLbvqMOzmWlOwRNWNFBGyiEt8gXphJ+SchHmPdH6m75aIS4iJ2DNBztjdaOf+huybbBAFtPcC1rEvHfuHnvs4xb02XMvbcWwE0Y54JTfeFrBhwrReTQt47ApprQVHYzozeQbA6ckJpkt1z/Nnmm8Ov9JF2wnqvWvpGYoIOOdepzoXYRGDxOO/cKkNFS7N9EpFS27rB9YBtSzSsev/6A8hE22QiS2nRHK7Sf1yP0tWQOvxH5s1FwDhFnLHw3PgsOAjxtrMb99mcMd08eD7WJrzCAM4OgwKqD76xN1yk5IB13zyXGz/3jWoLl/AW74ieVhYvYjtkIVqDmdDpwnE2SW6RqFlaWS3noMBSpF08JBgd891LfgeG4YGBLLZI2CNua7vNkpk9NA4JXZXm7/95R1Ta2wQi+dW/PLLNwBpFiAy9kVkmipJHfA0wlTG9XTAldxQ4XY1FilBSA61Q8=
   file: parsec_amd64.deb
   skip_cleanup: true
   on:

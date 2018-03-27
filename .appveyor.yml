@@ -7,6 +7,7 @@ environment:
   python: C:\Python36-x64\python.exe
   pip: C:\Python36-x64\Scripts\pip
   makensis: C:\PROGRA~2\NSIS\makensis.exe
+  backend_url: tcp://ec2-54-229-174-79.eu-west-1.compute.amazonaws.com:6777
 cache:
   - node_modules
   - "%APPDATA%\npm-cache"
@@ -33,8 +34,7 @@ build_script:
   - move build\core\parsec build\core\parsec.exe
   - move parsec-gui\platforms\win\parsec-gui-win32-x64 build\gui
   - cd build
-  - echo start /b core\parsec.exe backend >> parsec.bat
-  - echo timeout 1 >> parsec.bat
+  - echo parsec core --debug --log-level=DEBUG --I-am-John -A %backend_url% >> parsec.bat
   - echo start /b core\parsec.exe core >> parsec.bat
   - echo timeout 1 >> parsec.bat
   - echo gui\parsec-gui.exe >> parsec.bat
