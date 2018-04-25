@@ -11,8 +11,8 @@ environment:
 cache:
   - node_modules
   - "%APPDATA%\npm-cache"
-init:
-  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+# init:
+#   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 install:
   - ps: Install-Product node $env:nodejs_version
   - "%python% --version"
@@ -34,8 +34,8 @@ build_script:
   - move build\core\parsec build\core\parsec.exe
   - move parsec-gui\platforms\win\parsec-gui-win32-x64 build\gui
   - cd build
-  - echo parsec core --debug --log-level=DEBUG --I-am-John -A %backend_url% >> parsec.bat
-  - echo start /b core\parsec.exe core >> parsec.bat
+  - echo set FUSE_LIBRARY_PATH=C:\Progra~2\WinFsp\bin\winfsp-x64.dll >> parsec.bat
+  - echo start /b core\parsec.exe core --debug --log-level=DEBUG --I-am-John -A %backend_url% >> parsec.bat
   - echo timeout 1 >> parsec.bat
   - echo gui\parsec-gui.exe >> parsec.bat
   - echo taskkill /im parsec.exe /f >> parsec.bat
@@ -43,22 +43,19 @@ build_script:
   - Bat_To_Exe_Converter.exe /bat build/parsec.bat /exe build/parsec.exe /invisible /icon parsec-gui/public/favicon.ico /x64
   - del build\parsec.bat
   - "%makensis% parsec.nsi"
+  - "rename Parsec_setup.exe %APPVEYOR_REPO_TAG_NAME%-amd64.exe"
 test: off
 artifacts:
-  - path: Parsec_setup.exe
+  - path: "%APPVEYOR_REPO_TAG_NAME%-amd64.exe"
     name: installer
 deploy:
-  release: parsec-v$(appveyor_build_version)
-  # description: 'Release description'
+  release: "%APPVEYOR_REPO_TAG_NAME%"
   provider: GitHub
   auth_token:
     secure: y5xGHULS9oFoq68eKGzYdHF+tM4N0pCatrjXRey7tMki2rTEFNF2tFZmGt58ZI3T
   artifact: installer
-  # draft: false
-  # prerelease: false
+  draft: false
   on:
-    branch: master
-    # appveyor_repo_tag: true
-
-on_finish:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+    appveyor_repo_tag: true
+# on_finish:
+#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
