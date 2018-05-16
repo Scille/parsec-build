@@ -17,9 +17,7 @@ install:
 - sudo apt-get update
 - sudo apt-get install python3.6 python3-pip -y
 - sudo apt-get install git -y
-- git clone https://github.com/Scille/parsec-build.git
-- cd parsec-build
-- git submodule update --init --recursive
+- cd /home/travis/build/Scille/parsec-build
 - pip3 install virtualenv
 - virtualenv venv -p python3.6
 - source venv/bin/activate
@@ -48,7 +46,7 @@ script:
 - ln -s /usr/share/python/parsec-cloud/bin/parsec parsec-cloud/usr/bin/parsec
 - mv parsec-cloud/usr/bin/parsec-gui parsec-cloud/usr/bin/parsec-electron
 - echo '#!/usr/bin/env sh' >> parsec-cloud/usr/bin/parsec-gui
-- echo "parsec core --debug --log-level=DEBUG --I-am-John -A ${BACKEND_URL} &" >>
+- echo "parsec core --debug --log-level=DEBUG --log-file ~/.config/parsec/parsec-core.log --I-am-John -A ${BACKEND_URL} &" >>
   parsec-cloud/usr/bin/parsec-gui
 - echo 'sleep 1' >> parsec-cloud/usr/bin/parsec-gui
 - echo 'core_pid=$!' >> parsec-cloud/usr/bin/parsec-gui
