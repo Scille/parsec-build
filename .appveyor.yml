@@ -7,7 +7,6 @@ environment:
   python: C:\Python36-x64\python.exe
   pip: C:\Python36-x64\Scripts\pip
   makensis: C:\PROGRA~2\NSIS\makensis.exe
-  backend_url: tcp://ec2-54-229-174-79.eu-west-1.compute.amazonaws.com:6777
 cache:
   - node_modules
   - "%APPDATA%\npm-cache"
@@ -33,14 +32,7 @@ build_script:
   - move build\core\sqlite3.dll build\core\lib\sqlite3.dll
   - move build\core\parsec build\core\parsec.exe
   - move parsec-gui\platforms\win\parsec-gui-win32-x64 build\gui
-  - cd build
-  - echo set FUSE_LIBRARY_PATH=C:\Progra~2\WinFsp\bin\winfsp-x64.dll >> parsec.bat
-  # TODO log file
-  - echo start /b core\parsec.exe core --debug --log-level=DEBUG --I-am-John -A %backend_url% >> parsec.bat
-  - echo timeout 1 >> parsec.bat
-  - echo gui\parsec-gui.exe >> parsec.bat
-  - echo taskkill /im parsec.exe /f >> parsec.bat
-  - cd ..
+  - cp parsec.bat build
   - Bat_To_Exe_Converter.exe /bat build/parsec.bat /exe build/parsec.exe /invisible /icon parsec-gui/public/favicon.ico /x64
   - del build\parsec.bat
   - "%makensis% parsec.nsi"

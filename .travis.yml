@@ -4,8 +4,6 @@ branches:
 language: python
 python:
 - '3.6'
-env:
-- BACKEND_URL=tcp://ec2-54-229-174-79.eu-west-1.compute.amazonaws.com:6777
 install:
 - locale-gen en_US.UTF-8
 - export LANG="en_US.UTF-8"
@@ -45,13 +43,7 @@ script:
 - rsync -a parsec-gui/usr/ parsec-cloud/usr/
 - ln -s /usr/share/python/parsec-cloud/bin/parsec parsec-cloud/usr/bin/parsec
 - mv parsec-cloud/usr/bin/parsec-gui parsec-cloud/usr/bin/parsec-electron
-- echo '#!/usr/bin/env sh' >> parsec-cloud/usr/bin/parsec-gui
-- echo "parsec core --debug --log-level=DEBUG --log-file ~/.config/parsec/parsec-core.log --I-am-John -A ${BACKEND_URL} &" >>
-  parsec-cloud/usr/bin/parsec-gui
-- echo 'sleep 1' >> parsec-cloud/usr/bin/parsec-gui
-- echo 'core_pid=$!' >> parsec-cloud/usr/bin/parsec-gui
-- echo 'parsec-electron' >> parsec-cloud/usr/bin/parsec-gui
-- echo 'kill $core_pid' >> parsec-cloud/usr/bin/parsec-gui
+- cp ../parsec.sh parsec-cloud/usr/bin/parsec-gui
 - chmod +x parsec-cloud/usr/bin/parsec-gui
 - depends_line=`grep "Depends:" parsec-gui/DEBIAN/control`
 - sed -i "7i $depends_line" parsec-cloud/DEBIAN/control
