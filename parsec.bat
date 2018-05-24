@@ -1,3 +1,4 @@
+set SENTRY_URL=https://863e60bbef39406896d2b7a5dbd491bb@sentry.io/1212848
 set BACKEND_URL=tcp://ec2-54-229-174-79.eu-west-1.compute.amazonaws.com:6777
 set FUSE_LIBRARY_PATH=C:\Progra~2\WinFsp\bin\winfsp-x64.dll
 mkdir %APPDATA%\parsec 2> nul
