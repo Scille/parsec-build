@@ -71,7 +71,9 @@ Section "Install"
   !define WINFSP winfsp-1.2.17346.msi
 
   File ${WINFSP}
-  ExecWait "msiexec /i ${WINFSP} /q"
+  ;TODO Don't install and run WinFsp globally
+  ;ExecWait "msiexec /i winfsp-1.2.17346.msi INSTALLDIR=$\"$INSTDIR\WinFsp$\" /q"
+  ExecWait "msiexec /i winfsp-1.2.17346.msi /q"
   Delete $INSTDIR\${WINFSP}
 
   File /r build\*.*
@@ -120,6 +122,7 @@ SectionEnd
 
 Section "Uninstall"
 
+  nsExec::Exec "wmic product where name=$\"WinFsp 2017.2$\" call uninstall /nointeractive"
   RMDir /r "$INSTDIR"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
