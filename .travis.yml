@@ -27,8 +27,9 @@ install:
 - sudo chmod +x /usr/local/bin/n
 - sudo n stable
 script:
+- cp -r debian parsec-cloud
 - cd parsec-cloud
-- make deb
+- dpkg-buildpackage -us -uc -b
 - cd ../parsec-gui
 - npm install
 - npm run electron:deb
