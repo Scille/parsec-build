@@ -1,16 +1,19 @@
 branches:
   only:
-  - /^parsec-v.*$/
+  - "/^parsec-v.*$/"
 language: python
 python:
 - '3.6'
+before_install:
+- openssl aes-256-cbc -K $encrypted_a3192db55900_key -iv $encrypted_a3192db55900_iv
+  -in travis_secrets.tar.enc -out travis_secrets.tar -d
+- tar xvf travis_secrets.tar
 install:
 - locale-gen en_US.UTF-8
 - export LANG="en_US.UTF-8"
 - export LANGUAGE="en_US:en"
 - export LC_ALL="en_US.UTF-8"
 - sudo apt-get update
-- sudo apt-get install build-essential software-properties-common -y
 - sudo add-apt-repository ppa:jonathonf/python-3.6 -y
 - sudo apt-get update
 - sudo apt-get install python3.6 python3-pip -y
@@ -19,45 +22,35 @@ install:
 - pip3 install virtualenv
 - virtualenv venv -p python3.6
 - source venv/bin/activate
-- sudo apt-get install debhelper python3.6-dev python3-pytest libssl-dev -y
-- sudo apt-add-repository ppa:dh-virtualenv/daily -y
-- sudo apt-get update
-- sudo apt-get install dh-virtualenv libpq-dev libffi-dev fakeroot -y
+- pip install -e .
 - sudo curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
 - sudo chmod +x /usr/local/bin/n
 - sudo n stable
 script:
-- cp -r debian parsec-cloud
+- source venv/bin/activate
 - cd parsec-cloud
-- dpkg-buildpackage -us -uc -b
+- pip install -e .[all] --process-dependency-links
+- pyinstaller -n parsec parsec/cli.py
 - cd ../parsec-gui
 - npm install
-- npm run electron:deb
+- npm run electron:nix
 - cd ..
 - mkdir build
-- cd build
-- cp ../parsec-cloud*.deb .
-- cp ../parsec-gui/dist/installers/parsec-gui*.deb .
-- mkdir parsec-cloud parsec-gui
-- dpkg-deb -R parsec-cloud_0.1-1_amd64.deb parsec-cloud
-- dpkg-deb -R parsec-gui_0.1.0_amd64.deb parsec-gui
-- rsync -a parsec-gui/usr/ parsec-cloud/usr/
-- ln -s /usr/share/python/parsec-cloud/bin/parsec parsec-cloud/usr/bin/parsec
-- mv parsec-cloud/usr/bin/parsec-gui parsec-cloud/usr/bin/parsec-electron
-- cp ../parsec.sh parsec-cloud/usr/bin/parsec-gui
-- chmod +x parsec-cloud/usr/bin/parsec-gui
-- depends_line=`grep "Depends:" parsec-gui/DEBIAN/control`
-- sed -i "7i $depends_line" parsec-cloud/DEBIAN/control
-- cloud_size=`grep "Installed-Size:" parsec-cloud/DEBIAN/control | cut -f 2 -d " "`
-- gui_size=`grep "Installed-Size:" parsec-gui/DEBIAN/control | cut -f 2 -d " "`
-- total_size=$((cloud_size + gui_size))
-- sed -i -- "s/$cloud_size/$total_size/g" parsec-cloud/DEBIAN/control
-- dpkg-deb -b parsec-cloud ${TRAVIS_TAG}-amd64.deb
+- mv parsec-cloud/dist/parsec build/parsec-cloud
+- mv parsec-gui/platforms/nix/parsec-gui-linux-x64 build/parsec-gui
+- mkdir .pyupdater
+- mv client_config_travis.py client_config.py
+- mv pyupdater_config_travis.pyu .pyupdater/config.pyu
+- pyupdater keys -i
+- pyupdater build --app-version=0.0.2 parsec.py --add-data "../../build/parsec-cloud:parsec-cloud"
+  --add-data "../../build/parsec-gui:parsec-gui" --add-data "../../parsec.cfg:."
+- pyupdater pkg --process --sign
+- pyupdater upload --service s3
 deploy:
   provider: releases
   api_key:
     secure: CutotKaygqlJ3uHHhAwVt03E/zD+B7tDoZmvAdcSTOk8Ja1oBQX81f2q0T6i+cXncnzR4Don7WiUVMFkDkrCPx1GP6Dvy8dfP1868Y9Tn0c1Mg7aHvr6h0RKW6IbVZ2Y/CTAkCwKdS78IExmxn6yYWp5IaHTlDTDyoz93pDz9DUw1IRsaqS1tcaGkQW2V5iEFjNPqCdIHdzAh1Vra9mc7JLkIeozzLbvqMOzmWlOwRNWNFBGyiEt8gXphJ+SchHmPdH6m75aIS4iJ2DNBztjdaOf+huybbBAFtPcC1rEvHfuHnvs4xb02XMvbcWwE0Y54JTfeFrBhwrReTQt47ApprQVHYzozeQbA6ckJpkt1z/Nnmm8Ov9JF2wnqvWvpGYoIOOdepzoXYRGDxOO/cKkNFS7N9EpFS27rB9YBtSzSsev/6A8hE22QiS2nRHK7Sf1yP0tWQOvxH5s1FwDhFnLHw3PgsOAjxtrMb99mcMd08eD7WJrzCAM4OgwKqD76xN1yk5IB13zyXGz/3jWoLl/AW74ieVhYvYjtkIVqDmdDpwnE2SW6RqFlaWS3noMBSpF08JBgd891LfgeG4YGBLLZI2CNua7vNkpk9NA4JXZXm7/95R1Ta2wQi+dW/PLLNwBpFiAy9kVkmipJHfA0wlTG9XTAldxQ4XY1FilBSA61Q8=
-  file: ${TRAVIS_TAG}-amd64.deb
+  file: pyu-data/files/parsec-nix64-0.0.2.tar.gz
   skip_cleanup: true
   draft: false
   on:
