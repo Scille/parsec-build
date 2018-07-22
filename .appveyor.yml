@@ -42,12 +42,12 @@ build_script:
   - move client_config_appveyor.py client_config.py
   - move pyupdater_config_appveyor.pyu .pyupdater/config.pyu
   - "%pyupdater% keys -i"
-  - "%pyupdater% build --app-version=0.0.2 parsec.py --windowed --icon parsec-gui/public/favicon.ico --add-data \"../../winfsp-1.3.18160.msi;.\" --add-data \"../../build/parsec-cloud;parsec-cloud\" --add-data \"../../build/parsec-gui;parsec-gui\" --add-data \"../../parsec.cfg;.\""
+  - "%pyupdater% build --app-version=0.0.3 parsec.py --windowed --icon parsec-gui/public/favicon.ico --add-data \"../../winfsp-1.3.18160.msi;.\" --add-data \"../../build/parsec-cloud;parsec-cloud\" --add-data \"../../build/parsec-gui;parsec-gui\" --add-data \"../../parsec.cfg;.\""
   - "%pyupdater% pkg --process --sign"
   - "%pyupdater% upload --service s3"
 test: off
 artifacts:
-  - path: pyu-data/files/parsec-win-0.0.2.zip
+  - path: pyu-data/files/parsec-win-0.0.3.zip
     name: installer 
 deploy:
   release: "%APPVEYOR_REPO_TAG_NAME%"
