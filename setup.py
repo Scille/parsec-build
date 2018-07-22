@@ -9,7 +9,7 @@ requirements = ["boto3==1.4.4", "botocore==1.5.46", "PyUpdater==2.5.3"]
 
 setup(
     name="parsec-build",
-    version="0.5.0",
+    version="0.0.3",
     description="Secure cloud build framework",
     author="Scille SAS",
     author_email="contact@scille.fr",
