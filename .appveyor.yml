@@ -37,6 +37,7 @@ build_script:
   - npm run electron:win
   - cd ..
   - mkdir build
+  - xcopy parsec-cloud\dist\parsec\pytz parsec-cloud\dist\parsec\pytzdata\  # https://github.com/sdispater/pendulum/pull/236
   - move parsec-cloud/dist/parsec build/parsec-cloud
   - move parsec-gui/platforms/win/parsec-gui-win32-x64 build/parsec-gui
   - mkdir .pyupdater

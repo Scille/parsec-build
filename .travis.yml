@@ -39,6 +39,7 @@ script:
 - npm run electron:nix
 - cd ..
 - mkdir build
+- cp -r parsec-cloud/dist/parsec/pytz parsec-cloud/dist/parsec/pytzdata # https://github.com/sdispater/pendulum/pull/236
 - mv parsec-cloud/dist/parsec build/parsec-cloud
 - mv parsec-gui/platforms/nix/parsec-gui-linux-x64 build/parsec-gui
 - mkdir .pyupdater
