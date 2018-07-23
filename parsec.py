@@ -17,7 +17,7 @@ def resource_path(relative_path):
 
 if __name__ == "__main__":
     pyupdater_utils.switch_to_safe_dir()
-    pyupdater_utils.get_update("0.1.2")
+    pyupdater_utils.get_update("0.1.3")
 
     config = configparser.ConfigParser()
     config.read(resource_path("parsec.cfg"))
