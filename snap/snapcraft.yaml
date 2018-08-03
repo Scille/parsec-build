@@ -19,7 +19,7 @@ grade: devel # must be 'stable' to release into candidate/stable channels
 
 apps:
   parsec:
-    command: bin/parsec
+    command: parsec
     # desktop: usr/share/applications/myApp.desktop
     # plugs:
     #     - fuse-support
@@ -34,7 +34,7 @@ apps:
 parts:
   bootstrap:
     plugin: dump
-    source: "../scripts/"
+    source: "../scripts/bin"
 
   parsec-core:
     plugin: python
@@ -42,10 +42,24 @@ parts:
     process-dependency-links: True
     source: https://github.com/Scille/parsec-cloud.git
     override-pull: |
+      ../install/usr/bin/python3 -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 6) else 1)" || \
+        ( \
+        echo "Force default Python to version " `../install/usr/bin/python3.6 --version`; \
+        rm ../install/usr/bin/python3; \
+        ln -s python3.6 ../install/usr/bin/python3; \
+        rm ../install/usr/bin/python3m; \
+        ln -s python3.6m ../install/usr/bin/python3m; \
+        )
+      echo "Installing pip, setuptools"
+      python3 -m pip --version
+      python3 -m pip install -U pip setuptools
+      python3 -m pip --version
       snapcraftctl pull
       git checkout v$SNAPCRAFT_PROJECT_VERSION
       sed -i 's/cx_Freeze/cxxxx_Freeze/' setup.py
       rm bdb.py
+      cp ../../../../scripts/setup.py .
+    #   virtualenv -p /usr/bin/python3.6 venv
     # override-build: |
     #   snapcraftctl build
     #   echo '========>' `which python`
@@ -54,8 +68,12 @@ parts:
     #   python3 --version
     stage-packages:
       - python3.6
+      - python3-pip
+      - python3-virtualenv
     build-packages:
       - python3.6
+      - python3-pip
+      - python3-virtualenv
 
 
 #     plugin: dump
