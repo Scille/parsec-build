@@ -1,0 +1,10 @@
+#! /bin/sh
+
+mkdir -p ~/.config/parsec
+LOG_FILE=~/.config/parsec/parsec-core.log
+echo Starting parsec core >> $LOG_FILE
+parsec core --log-level=DEBUG --log-file $LOG_FILE --I-am-John -A ${BACKEND_URL} &
+sleep 1
+core_pid=$!
+../parsec-gui/parsec-gui
+kill $core_pid
