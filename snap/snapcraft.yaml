@@ -50,11 +50,9 @@ parts:
         rm ../install/usr/bin/python3m; \
         ln -s python3.6m ../install/usr/bin/python3m; \
         )
-      echo "Installing pip, setuptools"
-      python3 -m pip --version
-      python3 -m pip install -U pip setuptools
-      python3 -m pip --version
+
       snapcraftctl pull
+
       git checkout v$SNAPCRAFT_PROJECT_VERSION
       sed -i 's/cx_Freeze/cxxxx_Freeze/' setup.py
       rm bdb.py
@@ -97,18 +95,19 @@ parts:
 #       - python3-virtualenv
 #     #   - fuse
 
-  parsec-gui:
-    plugin: dump
-    source: ../parsec-gui-build/
+  # parsec-gui:
+  #   plugin: dump
+  #   source: ../parsec-gui-build/
 
-#  parsec-gui:
-#    plugin: nodejs
-#    source: https://github.com/Scille/parsec-gui.git
-#    override-build: |
-#      git checkout v$SNAPCRAFT_PROJECT_VERSION
-#      npm install --package-lock-only
-#      npm run electron:nix
-#      cp -v -r platforms/nix/parsec-gui-linux-x64/ $SNAPCRAFT_PART_INSTALL/parsec-gui
+  parsec-gui:
+    plugin: nodejs
+    source: https://github.com/Scille/parsec-gui.git
+    node-engine: 8.11.3
+    override-build: |
+      git checkout v$SNAPCRAFT_PROJECT_VERSION
+      npm install
+      npm run electron:nix
+      cp -v -r platforms/nix/parsec-gui-linux-x64/ $SNAPCRAFT_PART_INSTALL/parsec-gui
 
 #    plugin: dump
 #    source: https://github.com/Scille/parsec-gui.git
