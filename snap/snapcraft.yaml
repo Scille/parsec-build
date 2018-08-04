@@ -1,5 +1,6 @@
 name: parsec
 version: '0.6.0'
+#version-script: git -C parts/parsec-core/src describe --tags
 summary: Secure cloud framework # 79 char long summary
 description: |
   Parsec is an open-source cloud-based application that allow simple yet
@@ -7,26 +8,13 @@ description: |
 type: app
 
 confinement: classic # classic is needed to have fuse working
-#icon:
+icon: "../scripts/bin/parsec.png"
 grade: devel # must be 'stable' to release into candidate/stable channels
-
-# plugs:
-#   python3:
-#     interface: content
-#     content: python3
-#     target: python
-#     default-provider: python36-jamesh
 
 apps:
   parsec:
     command: parsec
-    # desktop: usr/share/applications/myApp.desktop
-    # plugs:
-    #     - fuse-support
-    #     - mount-observe
-    #     - home
-    # plugs:
-    #   - python3
+    desktop: parsec.desktop
     environment:
       BACKEND_URL: "tcp://ec2-54-229-174-79.eu-west-1.compute.amazonaws.com:6777"
       # SENTRY_URL: ""
@@ -39,65 +27,26 @@ parts:
   parsec-core:
     plugin: python
     python-version: python3
-    process-dependency-links: True
+    requirements: requirements.txt
     source: https://github.com/Scille/parsec-cloud.git
     override-pull: |
-      ../install/usr/bin/python3 -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 6) else 1)" || \
-        ( \
-        echo "Force default Python to version " `../install/usr/bin/python3.6 --version`; \
-        rm ../install/usr/bin/python3; \
-        ln -s python3.6 ../install/usr/bin/python3; \
-        rm ../install/usr/bin/python3m; \
-        ln -s python3.6m ../install/usr/bin/python3m; \
-        )
+      # ../install/usr/bin/python3 -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 6) else 1)" || \
+      #   ( \
+      #   echo "Force default Python to version " `../install/usr/bin/python3.6 --version`; \
+      #   rm ../install/usr/bin/python3; \
+      #   ln -s python3.6 ../install/usr/bin/python3; \
+      #   rm ../install/usr/bin/python3m; \
+      #   ln -s python3.6m ../install/usr/bin/python3m; \
+      #   )
 
       snapcraftctl pull
 
       git checkout v$SNAPCRAFT_PROJECT_VERSION
-      sed -i 's/cx_Freeze/cxxxx_Freeze/' setup.py
-      rm bdb.py
+      #rm setup.py
       cp ../../../../scripts/setup.py .
-    #   virtualenv -p /usr/bin/python3.6 venv
-    # override-build: |
-    #   snapcraftctl build
-    #   echo '========>' `which python`
-    #   python --version
-    #   echo '3========>' `which python3`
-    #   python3 --version
+      cp ../../../../scripts/requirements.txt .
     stage-packages:
-      - python3.6
-      - python3-pip
-      - python3-virtualenv
-    build-packages:
-      - python3.6
-      - python3-pip
-      - python3-virtualenv
-
-
-#     plugin: dump
-# #    python-version: python3
-#     process-dependency-links: True
-#     source: https://github.com/Scille/parsec-cloud.git
-#     override-pull: |
-#       snapcraftctl pull
-#       git checkout v$SNAPCRAFT_PROJECT_VERSION
-#       rm bdb.py
-#     override-build: |
-#       python3 --version
-#       virtualenv -p `which python3` venv
-#       . ./venv/bin/activate
-#       pip install -e .
-# #      snapcraftctl build
-#     stage-packages:
-#       - python3.6
-#     build-packages:
-#       - python3.6
-#       - python3-virtualenv
-#     #   - fuse
-
-  # parsec-gui:
-  #   plugin: dump
-  #   source: ../parsec-gui-build/
+      - libc6
 
   parsec-gui:
     plugin: nodejs
@@ -108,23 +57,22 @@ parts:
       npm install
       npm run electron:nix
       cp -v -r platforms/nix/parsec-gui-linux-x64/ $SNAPCRAFT_PART_INSTALL/parsec-gui
-
-#    plugin: dump
-#    source: https://github.com/Scille/parsec-gui.git
-#    override-build: |
-#      git checkout v$SNAPCRAFT_PROJECT_VERSION
-#      echo 'node version:' `nodejs --version`
-#      echo 'npm version:' `npm --version`
-#      npm install
-#    build-packages:
-#      - nodejs
-#      - npm
-#    override-install: |
-#      cp file.ext $SNAPCRAFT_PART_INSTALL/file.ext
-
-#    build-packages:
-#      snapcraftctl build
-
-#  parsec-gui:
-#    plugin: dump
-#    source: parsec-gui
+      rm ../install/lib/node_modules/parsec-gui
+    stage-packages:
+      - libgconf2-4
+      - zlib1g  #  need version > 1.2.9 but 1.2.8 is provided by default...
+      - libcanberra-gtk-module
+      - libc6
+      # Quick&dirty dependencies dump after atom snap...
+      - libappindicator3-1
+      - libasound2
+      - libcurl3-gnutls
+      - libgconf-2-4
+      - libgtk-3-0
+      - libnotify4
+      - libnspr4
+      - libnss3
+      - libpcre3
+      - libpulse0
+      - libxss1
+      - libxtst6

@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=Parsec
+Comment=Secure cloud framework
+Exec=parsec
+Icon=parsec.png
+Type=Application

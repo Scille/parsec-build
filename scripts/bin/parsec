@@ -3,8 +3,8 @@
 mkdir -p ~/.config/parsec
 LOG_FILE=~/.config/parsec/parsec-core.log
 echo Starting parsec core >> $LOG_FILE
-${SNAP}/bin/parsec core --log-level=DEBUG --log-file $LOG_FILE --I-am-John -A ${BACKEND_URL}
-#sleep 1
-#core_pid=$!
-#${SNAP}/parsec-gui/parsec-gui
-#kill $core_pid
+${SNAP}/usr/bin/python3 ${SNAP}/bin/parsec core --log-level=DEBUG --log-file $LOG_FILE --I-am-John -A ${BACKEND_URL} &
+sleep 1
+core_pid=$!
+${SNAP}/parsec-gui/parsec-gui
+kill $core_pid
