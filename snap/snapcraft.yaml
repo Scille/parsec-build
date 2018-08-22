@@ -1,4 +1,4 @@
-name: parsec
+name: parsec-cloud
 version: '0.6.0'
 #version-script: git -C parts/parsec-core/src describe --tags
 summary: Secure cloud framework # 79 char long summary
