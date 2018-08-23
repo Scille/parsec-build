@@ -1,8 +1,7 @@
-﻿
-$ErrorActionPreference = 'Stop';
+﻿$ErrorActionPreference = 'Stop';
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = 'http://localhost:8000/parsec-v0.8.2-amd64.exe'
-$url64      = 'http://localhost:8000/parsec-v0.8.2-amd64.exe'
+$url        = 'https://github.com/Scille/parsec-build/releases/download/v0.1.4/parsec-v0.1.4-amd64.exe'
+$url64      = 'https://github.com/Scille/parsec-build/releases/download/v0.1.4/parsec-v0.1.4-amd64.exe'
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
@@ -13,9 +12,9 @@ $packageArgs = @{
 
   softwareName  = 'parsec*'
 
-  checksum      = 'DF8CB494524E146B0182D50EA25F3109961244F15E2BF5424701DBF86FA4B7BD'
+  checksum      = 'CHECKSUM'
   checksumType  = 'sha256'
-  checksum64    = 'DF8CB494524E146B0182D50EA25F3109961244F15E2BF5424701DBF86FA4B7BD'
+  checksum64    = 'CHECKSUM'
   checksumType64= 'sha256'
 
   silentArgs    = "/S `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`""

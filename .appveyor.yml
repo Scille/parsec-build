@@ -8,8 +8,6 @@ environment:
   pip: C:\Python36-x64\Scripts\pip
   makensis: C:\PROGRA~2\NSIS\makensis.exe
   release_version: 0.1.4
-  choco_api_key:
-    secure: gZavVWTve5YMJ4SYsCMPvwuQRiG83GW2gpUnHU7sXgo4ea1oyyR40CmY0ejfp5iR
 cache:
   - node_modules
   - "%APPDATA%\npm-cache"
@@ -32,28 +30,40 @@ build_script:
   - cd ..
   - mkdir build
   - move parsec-cloud\build\exe.win-amd64-3.6 build\core
-  - move build\core\sqlite3.dll build\core\lib\sqlite3.dll
+  # - move build\core\sqlite3.dll build\core\lib\sqlite3.dll
   - move build\core\parsec build\core\parsec.exe
   - move parsec-gui\platforms\win\parsec-gui-win32-x64 build\gui
   - cp parsec.bat build
   - Bat_To_Exe_Converter.exe /bat build/parsec.bat /exe build/parsec.exe /invisible /icon parsec-gui/public/favicon.ico /x64
   - del build\parsec.bat
   - "%makensis% parsec.nsi"
+  - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'CHECKSUM', (get-filehash Parsec_setup.exe).hash | Out-File choco\tools\chocolateyinstall.ps1"
   - "rename Parsec_setup.exe parsec-v%release_version%-amd64.exe"
-  - "choco apikey -k %choco_api_key% -s https://push.chocolatey.org/"
-  - choco push parsec.nupkg -s -s https://chocolatey.org/
+  - cd choco
+  - choco pack
 test: off
 artifacts:
   - path: "parsec-v%release_version%-amd64.exe"
     name: installer
+  - path: "choco/parsec-cloud.%release_version%.nupkg"
+    name: choco_package
 deploy:
-  release: "%APPVEYOR_REPO_TAG_NAME%"
-  provider: GitHub
-  auth_token:
-    secure: y5xGHULS9oFoq68eKGzYdHF+tM4N0pCatrjXRey7tMki2rTEFNF2tFZmGt58ZI3T
-  artifact: installer
-  draft: false
-  on:
-    appveyor_repo_tag: true
+  - provider: GitHub
+    release: "%APPVEYOR_REPO_TAG_NAME%"
+    auth_token:
+      secure: y5xGHULS9oFoq68eKGzYdHF+tM4N0pCatrjXRey7tMki2rTEFNF2tFZmGt58ZI3T
+    artifact: installer
+    draft: false
+    on:
+      appveyor_repo_tag: true
+  - provider: NuGet
+    server: https://push.chocolatey.org/
+    api_key:
+      secure: gZavVWTve5YMJ4SYsCMPvwuQRiG83GW2gpUnHU7sXgo4ea1oyyR40CmY0ejfp5iR
+    skip_symbols: true
+    artifact: choco_package
+    on:
+      appveyor_repo_tag: true
+
 # on_finish:
 #   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
