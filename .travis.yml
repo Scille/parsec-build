@@ -7,10 +7,7 @@ python:
 env:
   global:
     - VERSION=0.1.4
-before_install:
-- openssl aes-256-cbc -K $encrypted_a3192db55900_key -iv $encrypted_a3192db55900_iv
-  -in travis_secrets.tar.enc -out travis_secrets.tar -d
-- tar xvf travis_secrets.tar
+    - SNAP_TOKEN=W2xvZ2luLnVidW50dS5jb21dCm1hY2Fyb29uID0gTURBeU9XeHZZMkYwYVc5dUlHMTVZWEJ3Y3k1a1pYWmxiRzl3WlhJdWRXSjFiblIxTG1OdmJRb3dNREUyYVdSbGJuUnBabWxsY2lCTmVVRndjSE1LTURBMFltTnBaQ0J0ZVdGd2NITXVaR1YyWld4dmNHVnlMblZpZFc1MGRTNWpiMjE4ZG1Gc2FXUmZjMmx1WTJWOE1qQXhPQzB3T0MweU5GUXhNRG93TVRveU15NDNOelkzTkRBS01ERTNaR05wWkNCN0luTmxZM0psZENJNklDSnNha1pwUzNCRlZtMXNRVzFhTVZCbVoydFFPVVJrZHpKNFNqUXpkRTFyZDNKVU5WZENXazgzVm1SSU1FNDVhMWh6TURORVZsUkpRVTFMVVZCa0wwRjBibFZ3VUVvNVdHeElVRkZGWkRFclRVUlFXa1ZWZUdOaldtdFdOM1JYU2xWUE1sQkdSV0kzWWpVd2JqWnVXbWcyZVdOR1VpOWFiR3RaTDNOaFQySnVXamd6VTNwNGNWaGxjRzlCWVVGd00xbFNkREJzTldGMk5HbHFZVEp1TmtGb05WcDROVU5uUmtKbGJHdGlkWEoyTVRKa09XbHlSVVU1VlUxNGIyZExWWGROZVZGRGQzcHJaVkZsUldkRFZXMHlWMjVUYlhWaE9FRjVjRzg1UkRWclRuZzBlRkYxVFdacGNsZG9aVGhvYm5waE9HRmxiREZyV20xeE1VVmFVVGd6Y2pkc1FrbEtlUzgxVTBWQ1IzY3dORzV0VUVwalkzcFhjVmx3ZVZwclozUm5VM1ZPYVZJemRuVlhOM0ZrYUVaVFJ5ODRiMUpwSzFkeGFHaFBkRmxOZG1oTVpVVlFSMjl3ZFVaMU5qbHhSMnAzUjFjdlpVRTlQU0lzSUNKMlpYSnphVzl1SWpvZ01YMEtNREExTVhacFpDQ25BcEFybEgxME5qZVdxbFpGcHFoOWlwVENPZU5udTQ2RmdORENxVGc0U3lvRWdfZ1p6RHVxMjVkQ1lSQlhTVUtPQVBENUpCRFFRNG40c1RlblhwaFdxNkRxYlF4Nl9WQUtNREF4T0dOc0lHeHZaMmx1TG5WaWRXNTBkUzVqYjIwS01EQXpOV05wWkNCdGVXRndjSE11WkdWMlpXeHZjR1Z5TG5WaWRXNTBkUzVqYjIxOFkyaGhibTVsYkh4YkltVmtaMlVpWFFvd01EVTBZMmxrSUcxNVlYQndjeTVrWlhabGJHOXdaWEl1ZFdKMWJuUjFMbU52Ylh4d1lXTnJZV2RsWDJsa2ZGc2lOblZ2TVVGT01ERnRWekJCTmxGWlNuTlFVMmhCTW10c1dITjRibUV6YjFJaVhRb3dNRGsyWTJsa0lHMTVZWEJ3Y3k1a1pYWmxiRzl3WlhJdWRXSjFiblIxTG1OdmJYeGhZMng4V3lKd1lXTnJZV2RsWDJGalkyVnpjeUlzSUNKd1lXTnJZV2RsWDIxaGJtRm5aU0lzSUNKd1lXTnJZV2RsWDNCMWMyZ2lMQ0FpY0dGamEyRm5aVjl5WldkcGMzUmxjaUlzSUNKd1lXTnJZV2RsWDNKbGJHVmhjMlVpTENBaWNHRmphMkZuWlY5MWNHUmhkR1VpWFFvd01ESm1jMmxuYm1GMGRYSmxJSUFocHdXVzFKVzBZTzBBQlNiOWkzbXBMTjNOSUhHd1N5dUxLMVk0ZHloaENnCnVuYm91bmRfZGlzY2hhcmdlID0gTURBeFpXeHZZMkYwYVc5dUlHeHZaMmx1TG5WaWRXNTBkUzVqYjIwS01ERTROR2xrWlc1MGFXWnBaWElnZXlKelpXTnlaWFFpT2lBaWJHcEdhVXR3UlZadGJFRnRXakZRWm1kclVEbEVaSGN5ZUVvME0zUk5hM2R5VkRWWFFscFBOMVprU0RCT09XdFljekF6UkZaVVNVRk5TMUZRWkM5QmRHNVZjRkJLT1Zoc1NGQlJSV1F4SzAxRVVGcEZWWGhqWTFwclZqZDBWMHBWVHpKUVJrVmlOMkkxTUc0MmJscG9ObmxqUmxJdldteHJXUzl6WVU5aWJsbzRNMU42ZUhGWVpYQnZRV0ZCY0ROWlVuUXdiRFZoZGpScGFtRXlialpCYURWYWVEVkRaMFpDWld4clluVnlkakV5WkRscGNrVkZPVlZOZUc5blMxVjNUWGxSUTNkNmEyVlJaVVZuUTFWdE1sZHVVMjExWVRoQmVYQnZPVVExYTA1NE5IaFJkVTFtYVhKWGFHVTRhRzU2WVRoaFpXd3hhMXB0Y1RGRldsRTRNM0kzYkVKSlNua3ZOVk5GUWtkM01EUnViVkJLWTJONlYzRlpjSGxhYTJkMFoxTjFUbWxTTTNaMVZ6ZHhaR2hHVTBjdk9HOVNhU3RYY1dob1QzUlpUWFpvVEdWRlVFZHZjSFZHZFRZNWNVZHFkMGRYTDJWQlBUMGlMQ0FpZG1WeWMybHZiaUk2SURGOUNqQXdaakpqYVdRZ2JHOW5hVzR1ZFdKMWJuUjFMbU52Ylh4aFkyTnZkVzUwZkdWNVNqRmpNbFo1WW0xR2RGcFRTVFpKUTBwdFkyMDVlbU15Ykc1aWJWWXhaVU5KYzBsRFNuWmpSMVoxWVZkUmFVOXBRV2xSV0dSMFlUTnNkMVJwU1hOSlEwcHJZVmhPZDJKSFJqVmliVVowV2xOSk5rbERTa2RqYlVaMVdFaFZkMDFIVlROaU1teDZTVVpLZG1NelRuQmFNalZzWkZobmFVeERRV2xhVnpGb1lWZDNhVTlwUVdsYWJrcG9ZbTFPZG1GWVRYVmpiVGw2WXpKc2JtSnRWakZsUlVKNldUSnNjMkpIVlhWYWJrbHBURU5CYVdGWVRtWmtiVlo1WVZkYWNGcFhVV2xQYVVJd1kyNVdiR1pSUFQwS01EQTBNR05wWkNCc2IyZHBiaTUxWW5WdWRIVXVZMjl0ZkhaaGJHbGtYM05wYm1ObGZESXdNVGd0TURndE1qUlVNVEE2TURFNk1qUXVOemd3TkRVekNqQXdNMlZqYVdRZ2JHOW5hVzR1ZFdKMWJuUjFMbU52Ylh4c1lYTjBYMkYxZEdoOE1qQXhPQzB3T0MweU5GUXhNRG93TVRveU5DNDNPREEwTlRNS01EQXpZMk5wWkNCc2IyZHBiaTUxWW5WdWRIVXVZMjl0ZkdWNGNHbHlaWE44TWpBeE9TMHdPQzB5TkZReE1Eb3dNVG95TkM0M09EQTBPREFLTURBeVpuTnBaMjVoZEhWeVpTQ2NQMENsUUpqZHlnRm5FRU0yNk9PdUtQMWtSMmE5OTlJVnpCaU4xYUk3d2dvCmVtYWlsID0gZnJhbmNvaXMucm9zc2lnbmV1eEBzY2lsbGUuZnIKCg==
 install:
 - locale-gen en_US.UTF-8
 - export LANG="en_US.UTF-8"
@@ -21,42 +18,45 @@ install:
 - sudo apt-get update
 - sudo apt-get install python3.6 python3-pip -y
 - sudo apt-get install git -y
+- sudo apt-get install snapd -y
 - cd /home/travis/build/Scille/parsec-build
 - pip3 install virtualenv
 - virtualenv venv -p python3.6
-- source venv/bin/activate
-- pip install -e .
-- sudo curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
-- sudo chmod +x /usr/local/bin/n
-- sudo n stable
+# - source venv/bin/activate
+# - pip install -e .
+# - sudo curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
+# - sudo chmod +x /usr/local/bin/n
+# - sudo n stable
 script:
 - source venv/bin/activate
-- cd parsec-cloud
-- pip install -e .[all] --process-dependency-links
-- pyinstaller -n parsec parsec/cli.py
-- cd ../parsec-gui
-- npm install
-- npm run electron:nix
-- cd ..
-- mkdir build
-- cp -r parsec-cloud/dist/parsec/pytz parsec-cloud/dist/parsec/pytzdata # https://github.com/sdispater/pendulum/pull/236
-- mv parsec-cloud/dist/parsec build/parsec-cloud
-- mv parsec-gui/platforms/nix/parsec-gui-linux-x64 build/parsec-gui
-- mkdir .pyupdater
-- mv client_config_travis.py client_config.py
-- mv pyupdater_config_travis.pyu .pyupdater/config.pyu
-- pyupdater keys -i
-- pyupdater build --app-version=${VERSION} parsec.py --add-data "../../build/parsec-cloud:parsec-cloud"
-  --add-data "../../build/parsec-gui:parsec-gui" --add-data "../../parsec.cfg:."
-- pyupdater pkg --process --sign
-- pyupdater upload --service s3
+- cd snap
+- snapcraft
+# - cd parsec-cloud
+# - pip install -e .[all] --process-dependency-links
+# - cd ../parsec-gui
+# - npm install
+# - npm run electron:nix
+# - cd ..
+# - mkdir build
+# - mv parsec-cloud/dist/parsec build/parsec-cloud
+# - mv parsec-gui/platforms/nix/parsec-gui-linux-x64 build/parsec-gui
+# deploy:
+#   provider: releases
+#   api_key:
+#     secure: CutotKaygqlJ3uHHhAwVt03E/zD+B7tDoZmvAdcSTOk8Ja1oBQX81f2q0T6i+cXncnzR4Don7WiUVMFkDkrCPx1GP6Dvy8dfP1868Y9Tn0c1Mg7aHvr6h0RKW6IbVZ2Y/CTAkCwKdS78IExmxn6yYWp5IaHTlDTDyoz93pDz9DUw1IRsaqS1tcaGkQW2V5iEFjNPqCdIHdzAh1Vra9mc7JLkIeozzLbvqMOzmWlOwRNWNFBGyiEt8gXphJ+SchHmPdH6m75aIS4iJ2DNBztjdaOf+huybbBAFtPcC1rEvHfuHnvs4xb02XMvbcWwE0Y54JTfeFrBhwrReTQt47ApprQVHYzozeQbA6ckJpkt1z/Nnmm8Ov9JF2wnqvWvpGYoIOOdepzoXYRGDxOO/cKkNFS7N9EpFS27rB9YBtSzSsev/6A8hE22QiS2nRHK7Sf1yP0tWQOvxH5s1FwDhFnLHw3PgsOAjxtrMb99mcMd08eD7WJrzCAM4OgwKqD76xN1yk5IB13zyXGz/3jWoLl/AW74ieVhYvYjtkIVqDmdDpwnE2SW6RqFlaWS3noMBSpF08JBgd891LfgeG4YGBLLZI2CNua7vNkpk9NA4JXZXm7/95R1Ta2wQi+dW/PLLNwBpFiAy9kVkmipJHfA0wlTG9XTAldxQ4XY1FilBSA61Q8=
+#   file: snap/parsec-cloud_${VERSION}_amd64.snap
+#   skip_cleanup: true
+#   draft: false
+#   on:
+#     repo: Scille/parsec-build
+#     tags: true
+
+
 deploy:
-  provider: releases
-  api_key:
-    secure: CutotKaygqlJ3uHHhAwVt03E/zD+B7tDoZmvAdcSTOk8Ja1oBQX81f2q0T6i+cXncnzR4Don7WiUVMFkDkrCPx1GP6Dvy8dfP1868Y9Tn0c1Mg7aHvr6h0RKW6IbVZ2Y/CTAkCwKdS78IExmxn6yYWp5IaHTlDTDyoz93pDz9DUw1IRsaqS1tcaGkQW2V5iEFjNPqCdIHdzAh1Vra9mc7JLkIeozzLbvqMOzmWlOwRNWNFBGyiEt8gXphJ+SchHmPdH6m75aIS4iJ2DNBztjdaOf+huybbBAFtPcC1rEvHfuHnvs4xb02XMvbcWwE0Y54JTfeFrBhwrReTQt47ApprQVHYzozeQbA6ckJpkt1z/Nnmm8Ov9JF2wnqvWvpGYoIOOdepzoXYRGDxOO/cKkNFS7N9EpFS27rB9YBtSzSsev/6A8hE22QiS2nRHK7Sf1yP0tWQOvxH5s1FwDhFnLHw3PgsOAjxtrMb99mcMd08eD7WJrzCAM4OgwKqD76xN1yk5IB13zyXGz/3jWoLl/AW74ieVhYvYjtkIVqDmdDpwnE2SW6RqFlaWS3noMBSpF08JBgd891LfgeG4YGBLLZI2CNua7vNkpk9NA4JXZXm7/95R1Ta2wQi+dW/PLLNwBpFiAy9kVkmipJHfA0wlTG9XTAldxQ4XY1FilBSA61Q8=
-  file: pyu-data/files/parsec-nix64-${VERSION}.tar.gz
+  provider: snap
+  snap: snap/parsec-cloud_${VERSION}_amd64.snap
+  channel: edge
   skip_cleanup: true
-  draft: false
   on:
     repo: Scille/parsec-build
     tags: true
