@@ -7,10 +7,6 @@ python:
 env:
   global:
     - VERSION=0.1.4
-before_install:
-- openssl aes-256-cbc -K $encrypted_a3192db55900_key -iv $encrypted_a3192db55900_iv
-  -in travis_secrets.tar.enc -out travis_secrets.tar -d
-- tar xvf travis_secrets.tar
 install:
 - locale-gen en_US.UTF-8
 - export LANG="en_US.UTF-8"
@@ -21,40 +17,33 @@ install:
 - sudo apt-get update
 - sudo apt-get install python3.6 python3-pip -y
 - sudo apt-get install git -y
+- sudo apt-get install snapcraft -y
 - cd /home/travis/build/Scille/parsec-build
 - pip3 install virtualenv
 - virtualenv venv -p python3.6
-- source venv/bin/activate
-- pip install -e .
-- sudo curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
-- sudo chmod +x /usr/local/bin/n
-- sudo n stable
+# - source venv/bin/activate
+# - pip install -e .
+# - sudo curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
+# - sudo chmod +x /usr/local/bin/n
+# - sudo n stable
 script:
 - source venv/bin/activate
-- cd parsec-cloud
-- pip install -e .[all] --process-dependency-links
-- pyinstaller -n parsec parsec/cli.py
-- cd ../parsec-gui
-- npm install
-- npm run electron:nix
-- cd ..
-- mkdir build
-- cp -r parsec-cloud/dist/parsec/pytz parsec-cloud/dist/parsec/pytzdata # https://github.com/sdispater/pendulum/pull/236
-- mv parsec-cloud/dist/parsec build/parsec-cloud
-- mv parsec-gui/platforms/nix/parsec-gui-linux-x64 build/parsec-gui
-- mkdir .pyupdater
-- mv client_config_travis.py client_config.py
-- mv pyupdater_config_travis.pyu .pyupdater/config.pyu
-- pyupdater keys -i
-- pyupdater build --app-version=${VERSION} parsec.py --add-data "../../build/parsec-cloud:parsec-cloud"
-  --add-data "../../build/parsec-gui:parsec-gui" --add-data "../../parsec.cfg:."
-- pyupdater pkg --process --sign
-- pyupdater upload --service s3
+- cd snap
+- snapcraft
+# - cd parsec-cloud
+# - pip install -e .[all] --process-dependency-links
+# - cd ../parsec-gui
+# - npm install
+# - npm run electron:nix
+# - cd ..
+# - mkdir build
+# - mv parsec-cloud/dist/parsec build/parsec-cloud
+# - mv parsec-gui/platforms/nix/parsec-gui-linux-x64 build/parsec-gui
 deploy:
   provider: releases
   api_key:
     secure: CutotKaygqlJ3uHHhAwVt03E/zD+B7tDoZmvAdcSTOk8Ja1oBQX81f2q0T6i+cXncnzR4Don7WiUVMFkDkrCPx1GP6Dvy8dfP1868Y9Tn0c1Mg7aHvr6h0RKW6IbVZ2Y/CTAkCwKdS78IExmxn6yYWp5IaHTlDTDyoz93pDz9DUw1IRsaqS1tcaGkQW2V5iEFjNPqCdIHdzAh1Vra9mc7JLkIeozzLbvqMOzmWlOwRNWNFBGyiEt8gXphJ+SchHmPdH6m75aIS4iJ2DNBztjdaOf+huybbBAFtPcC1rEvHfuHnvs4xb02XMvbcWwE0Y54JTfeFrBhwrReTQt47ApprQVHYzozeQbA6ckJpkt1z/Nnmm8Ov9JF2wnqvWvpGYoIOOdepzoXYRGDxOO/cKkNFS7N9EpFS27rB9YBtSzSsev/6A8hE22QiS2nRHK7Sf1yP0tWQOvxH5s1FwDhFnLHw3PgsOAjxtrMb99mcMd08eD7WJrzCAM4OgwKqD76xN1yk5IB13zyXGz/3jWoLl/AW74ieVhYvYjtkIVqDmdDpwnE2SW6RqFlaWS3noMBSpF08JBgd891LfgeG4YGBLLZI2CNua7vNkpk9NA4JXZXm7/95R1Ta2wQi+dW/PLLNwBpFiAy9kVkmipJHfA0wlTG9XTAldxQ4XY1FilBSA61Q8=
-  file: pyu-data/files/parsec-nix64-${VERSION}.tar.gz
+  file: snap/parsec-cloud_${VERSION}_amd64.snap
   skip_cleanup: true
   draft: false
   on:
