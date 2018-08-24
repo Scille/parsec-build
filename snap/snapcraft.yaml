@@ -1,5 +1,5 @@
-name: parsec-cloud
-version: '0.6.0'
+name: parsec
+version: 0.6.0
 #version-script: git -C parts/parsec-core/src describe --tags
 summary: Secure cloud framework # 79 char long summary
 description: |
@@ -18,16 +18,16 @@ apps:
     environment:
       BACKEND_URL: "tcp://ec2-54-229-174-79.eu-west-1.compute.amazonaws.com:6777"
       # SENTRY_URL: ""
-    plugs:
-      # TODO: useful given we use classic mode ?
-      - home
-      - network-bind
-      - x11
-      - unity7
-      - opengl
-      - wayland
-      - desktop
-      - desktop-legacy
+    # plugs:
+    #   # TODO: useful given we use classic mode ?
+    #   - home
+    #   - network-bind
+    #   - x11
+    #   - unity7
+    #   - opengl
+    #   - wayland
+    #   - desktop
+    #   - desktop-legacy
 
 parts:
   bootstrap:
