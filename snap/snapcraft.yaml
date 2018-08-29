@@ -1,5 +1,5 @@
 name: parsec
-version: 0.7.0
+version: '0.8.3'
 #version-script: git -C parts/parsec-core/src describe --tags
 summary: Secure cloud framework # 79 char long summary
 description: |
@@ -18,16 +18,6 @@ apps:
     environment:
       BACKEND_URL: "tcp://ec2-54-229-174-79.eu-west-1.compute.amazonaws.com:6777"
       # SENTRY_URL: ""
-    # plugs:
-    #   # TODO: useful given we use classic mode ?
-    #   - home
-    #   - network-bind
-    #   - x11
-    #   - unity7
-    #   - opengl
-    #   - wayland
-    #   - desktop
-    #   - desktop-legacy
 
 parts:
   bootstrap:
@@ -52,7 +42,7 @@ parts:
 
       curl https://bootstrap.pypa.io/get-pip.py | python3.6
       echo "PIP VERSION: " `pip --version`
-      pip install .[core] --process-dependency-links --target $SNAPCRAFT_PART_INSTALL/venv/lib/python3.6/site-packages
+      pip install .[core] --target $SNAPCRAFT_PART_INSTALL/venv/lib/python3.6/site-packages
 
       sed -i "s#$SNAPCRAFT_PART_INSTALL#\$SNAP#g" $PYTHON_HOST_PATH/../pyvenv.cfg
       sed -i "s#$SNAPCRAFT_PART_INSTALL#\$SNAP#g" `find $PYTHON_HOST_PATH -type f`

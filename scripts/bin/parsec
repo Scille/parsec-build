@@ -3,4 +3,4 @@
 mkdir -p ~/.config/parsec
 LOG_FILE=~/.config/parsec/parsec-core.log
 echo Starting parsec core >> $LOG_FILE
-${SNAP}/venv/bin/python -m parsec.cli core --log-level=DEBUG --log-file $LOG_FILE --I-am-John -A ${BACKEND_URL}
+${SNAP}/venv/bin/python -I -m parsec.cli core --log-level=DEBUG --log-file $LOG_FILE --I-am-John -A ${BACKEND_URL}
