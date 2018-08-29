@@ -2,7 +2,9 @@
 Name=Parsec
 Comment=Secure cloud framework
 Exec=parsec
-Icon=${SNAP}/meta/gui/parsec.png
+Icon=${SNAP}/meta/gui/icon.png
 Type=Application
+Terminal=false
+StartupNotify=false
 StartupWMClass=Parsec
 Categories=Network
