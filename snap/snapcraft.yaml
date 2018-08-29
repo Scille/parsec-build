@@ -13,7 +13,7 @@ grade: devel # must be 'stable' to release into candidate/stable channels
 
 apps:
   parsec:
-    command: desktop-launch parsec
+    command: parsec
     desktop: parsec.desktop
     environment:
       BACKEND_URL: "tcp://ec2-54-229-174-79.eu-west-1.compute.amazonaws.com:6777"
@@ -35,29 +35,37 @@ parts:
     source: "../scripts/bin"
 
   parsec-core:
-    plugin: python
-    python-version: python3
-    requirements: requirements.txt
+    plugin: dump
     source: https://github.com/Scille/parsec-cloud.git
     override-pull: |
-      # ../install/usr/bin/python3 -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 6) else 1)" || \
-      #   ( \
-      #   echo "Force default Python to version " `../install/usr/bin/python3.6 --version`; \
-      #   rm ../install/usr/bin/python3; \
-      #   ln -s python3.6 ../install/usr/bin/python3; \
-      #   rm ../install/usr/bin/python3m; \
-      #   ln -s python3.6m ../install/usr/bin/python3m; \
-      #   )
-
       snapcraftctl pull
 
       git checkout v$SNAPCRAFT_PROJECT_VERSION
-      #rm setup.py
-      rm bdb.py
-      cp ../../../../scripts/setup.py .
-      cp ../../../../scripts/requirements.txt .
+    override-build: |
+      echo 'PYTHON VERSION: ' `python3.6 --version` `which python3.6`
+
+      PYTHON_HOST_PATH=$SNAPCRAFT_PART_INSTALL/venv/bin/
+
+      python3.6 -m venv $SNAPCRAFT_PART_INSTALL/venv --without-pip
+
+      . $SNAPCRAFT_PART_INSTALL/venv/bin/activate
+
+      curl https://bootstrap.pypa.io/get-pip.py | python3.6
+      echo "PIP VERSION: " `pip --version`
+      pip install .[postgresql,fuse] --process-dependency-links --target $SNAPCRAFT_PART_INSTALL/venv/lib/python3.6/site-packages
+
+      sed -i "s#$SNAPCRAFT_PART_INSTALL#\$SNAP#g" $PYTHON_HOST_PATH/../pyvenv.cfg
+      sed -i "s#$SNAPCRAFT_PART_INSTALL#\$SNAP#g" `find $PYTHON_HOST_PATH -type f`
+      rm $PYTHON_HOST_PATH/python3.6
+      ln -s ../../usr/bin/python3.6 $PYTHON_HOST_PATH/python3.6
     stage-packages:
+      - python3.6
       - libc6
+    build-packages:
+      - python3.6-venv
+      - python3
+      - python3-virtualenv
+      - python3-pip
 
   parsec-gui:
     plugin: nodejs
