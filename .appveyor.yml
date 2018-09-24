@@ -7,7 +7,7 @@ environment:
   python: C:\Python36-x64\python.exe
   pip: C:\Python36-x64\Scripts\pip
   makensis: C:\PROGRA~2\NSIS\makensis.exe
-  release_version: 0.6.2
+  release_version: 0.6.3
 cache:
   - node_modules
   - "%APPDATA%\npm-cache"
