@@ -23,13 +23,10 @@ install:
 - pip3 install virtualenv
 - virtualenv venv -p python3.6
 - source venv/bin/activate
-# - pip install -e .
-- sudo curl -o /usr/local/bin/n https://raw.githubusercontent.com/visionmedia/n/master/bin/n
-- sudo chmod +x /usr/local/bin/n
-- sudo n stable
+- cat snap/.snapcraft/snapcraft.cfg
 deploy:
 skip_cleanup: true
 provider: script
-script: sudo docker run -v $(pwd):$(pwd) -t snapcore/snapcraft sh -c "apt-get install -y software-properties-common && add-apt-repository -y ppa:deadsnakes/ppa && apt update -qq && cd $(pwd)/snap && snapcraft && snapcraft push *.snap --release edge"
+script: sudo docker run -v $(pwd):$(pwd) -t snapcore/snapcraft sh -c "apt-get install -y software-properties-common && add-apt-repository -y ppa:deadsnakes/ppa && apt update -qq && cd $(pwd)/snap && snapcraft && snapcraft push *.snap --release stable"
 on:
   tags: true

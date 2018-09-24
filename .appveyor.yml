@@ -24,15 +24,11 @@ build_script:
   - "%pip% install .[all] --process-dependency-links"
   - "%pip% install cx_freeze idna"
   - "%python% setup.py build"
-  - cd ../parsec-gui
-  - npm install
-  - npm run electron:win
   - cd ..
   - mkdir build
   - move parsec-cloud\build\exe.win-amd64-3.6 build\core
   # - move build\core\sqlite3.dll build\core\lib\sqlite3.dll
   - move build\core\parsec build\core\parsec.exe
-  - move parsec-gui\platforms\win\parsec-gui-win32-x64 build\gui
   - cp parsec.bat build
   - Bat_To_Exe_Converter.exe /bat build/parsec.bat /exe build/parsec.exe /invisible /icon parsec-gui/public/favicon.ico /x64
   - del build\parsec.bat
