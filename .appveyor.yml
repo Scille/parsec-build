@@ -8,9 +8,6 @@ environment:
   pip: C:\Python36-x64\Scripts\pip
   makensis: C:\PROGRA~2\NSIS\makensis.exe
   release_version: 0.6.5
-cache:
-  - node_modules
-  - "%APPDATA%\npm-cache"
 # init:
 #   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 install:
@@ -27,7 +24,6 @@ build_script:
   - cd ..
   - mkdir build
   - move parsec-cloud\build\exe.win-amd64-3.6 build\core
-  # - move build\core\sqlite3.dll build\core\lib\sqlite3.dll
   - move build\core\parsec build\core\parsec.exe
   - cp parsec.bat build
   - Bat_To_Exe_Converter.exe /bat build/parsec.bat /exe build/parsec.exe /invisible /icon parsec-gui/public/favicon.ico /x64
@@ -60,6 +56,5 @@ deploy:
     artifact: choco_package
     on:
       appveyor_repo_tag: true
-
 # on_finish:
 #   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
