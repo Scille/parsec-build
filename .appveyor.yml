@@ -8,8 +8,8 @@ environment:
   pip: C:\Python36-x64\Scripts\pip
   makensis: C:\PROGRA~2\NSIS\makensis.exe
   release_version: 0.6.6
-# init:
-#   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 install:
   - ps: Install-Product node $env:nodejs_version
   - "%python% --version"
@@ -56,5 +56,5 @@ deploy:
     artifact: choco_package
     on:
       appveyor_repo_tag: true
-# on_finish:
-#   - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
