@@ -27,6 +27,6 @@ install:
 deploy:
 skip_cleanup: true
 provider: script
-script: sudo docker run -v $(pwd):$(pwd) -t snapcore/snapcraft sh -c "apt-get install -y software-properties-common && add-apt-repository -y ppa:deadsnakes/ppa && apt update -qq && cd $(pwd)/snap && snapcraft && snapcraft push *.snap --release stable"
+script: sudo docker run -v $(pwd):$(pwd) -t snapcore/snapcraft:stable sh -c "apt update -qq && apt-get install -y software-properties-common && add-apt-repository -y ppa:deadsnakes/ppa && apt update -qq && cd $(pwd)/snap && snapcraft && snapcraft push *.snap --release stable"
 on:
   tags: true
