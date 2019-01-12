@@ -1,7 +1,7 @@
 ﻿$ErrorActionPreference = 'Stop';
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = 'https://github.com/Scille/parsec-build/releases/download/v0.8.5/parsec-v0.8.5-amd64.exe'
-$url64      = 'https://github.com/Scille/parsec-build/releases/download/v0.8.5/parsec-v0.8.5-amd64.exe'
+$url        = 'https://github.com/Scille/parsec-build/releases/download/v0.8.6/parsec-v0.8.6-amd64.exe'
+$url64      = 'https://github.com/Scille/parsec-build/releases/download/v0.8.6/parsec-v0.8.6-amd64.exe'
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
