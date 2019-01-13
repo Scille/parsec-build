@@ -2,6 +2,13 @@ language: bash
 sudo: required
 services:
 - docker
+install:
+- openssl aes-256-cbc -K $encrypted_e80ce9d13f4b_key -iv $encrypted_e80ce9d13f4b_iv
+  -in snap/.snapcraft/travis_snapcraft.cfg -out snap/.snapcraft/snapcraft.cfg -d
+- locale-gen en_US.UTF-8
+- export LANG="en_US.UTF-8"
+- export LANGUAGE="en_US:en"
+- export LC_ALL="en_US.UTF-8"
 script: |-
   docker run -v $(pwd):$(pwd) -t snapcore/snapcraft:stable sh -c "
     apt update -qq &&
@@ -11,8 +18,6 @@ script: |-
     cd $(pwd)/snap &&
     snapcraft
   "
-after_success: |-
-  openssl aes-256-cbc -K $encrypted_e80ce9d13f4b_key -iv $encrypted_e80ce9d13f4b_iv -in snap/.snapcraft/travis_snapcraft.cfg -out snap/.snapcraft/snapcraft.cfg -d
 deploy:
   - provider: releases
     file: snap/parsec_*.snap
