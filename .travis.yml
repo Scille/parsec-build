@@ -9,7 +9,7 @@ install:
 - export LANGUAGE="en_US:en"
 - export LC_ALL="en_US.UTF-8"
 script: |-
-  docker run -v $(pwd):$(pwd) -t snapcore/snapcraft:stable sh -c "
+  docker run -v $(pwd):$(pwd) --rm -t snapcore/snapcraft:stable sh -c "
     apt update -qq &&
     apt-get install -y software-properties-common &&
     add-apt-repository -y ppa:deadsnakes/ppa &&
@@ -27,7 +27,10 @@ deploy:
     on:
       tags: true
   - provider: script
-    script: snapcraft push snap/parsec_*.snap --release edge
+    script: |-
+      docker run -v $(pwd):$(pwd) --rm -t snapcore/snapcraft:stable sh -c "
+        cd snap && snapcraft push parsec_*.snap --release edge
+      "
     skip_cleanup: true
     on:
       tags: true
