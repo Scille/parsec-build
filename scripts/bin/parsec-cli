@@ -1,0 +1,3 @@
+#! /bin/sh
+
+${SNAP}/venv/bin/python -I -m parsec.cli core gui --log-level=DEBUG --log-file=$LOG_FILE
