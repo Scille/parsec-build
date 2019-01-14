@@ -6,14 +6,19 @@ environment:
   python: C:\Python36-x64\python.exe
   pip: C:\Python36-x64\Scripts\pip
   makensis: C:\PROGRA~2\NSIS\makensis.exe
-  release_version: 0.9.2
-#init:
-#  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+branches:
+  only:
+  - master
+# init:
+ # - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 install:
   - "%python% --version"
 build_script:
-  - git clone --branch v%release_version% --depth 1 https://github.com/Scille/parsec-cloud.git
+  - set /p release_version=<version
+  - git clone https://github.com/Scille/parsec-cloud.git
   - cd parsec-cloud
+  - git fetch
+  - git checkout %release_version%
   - "%pip% install .[core,backend] --process-dependency-links"
   - "%pip% install cx_freeze idna"
   - "%python% setup.py build"
@@ -28,32 +33,31 @@ build_script:
   - Bat_To_Exe_Converter.exe /bat build/parsec.bat /exe build/parsec.exe /invisible /icon parsec-gui/public/favicon.ico /x64
   - del build\parsec.bat
   - "%makensis% parsec.nsi"
+  - powershell -Command "(gc choco\parsec.nuspec) -creplace 'VERSION', '%release_version:~1%' | Out-File choco\parsec.nuspec"
   - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'CHECKSUM', (get-filehash Parsec_setup.exe).hash | Out-File choco\tools\chocolateyinstall.ps1"
-  - "rename Parsec_setup.exe parsec-v%release_version%-amd64.exe"
+  - "rename Parsec_setup.exe parsec_%release_version%_amd64.exe"
   - cd choco
   - choco pack
+  - set original_release_version=%release_version%
+  - set release_version=%release_version:~1%
 test: off
 artifacts:
-  - path: "parsec-v%release_version%-amd64.exe"
+  - path: "parsec_%original_release_version%_amd64.exe"
     name: installer
   - path: "choco/parsec-cloud.%release_version%.nupkg"
     name: choco_package
 deploy:
   - provider: GitHub
-    release: "%APPVEYOR_REPO_TAG_NAME%"
+    release: "%original_release_version%"
     auth_token:
       secure: y5xGHULS9oFoq68eKGzYdHF+tM4N0pCatrjXRey7tMki2rTEFNF2tFZmGt58ZI3T
     artifact: installer
     draft: false
-    on:
-      appveyor_repo_tag: true
   - provider: NuGet
     server: https://push.chocolatey.org/
     api_key:
       secure: gZavVWTve5YMJ4SYsCMPvwuQRiG83GW2gpUnHU7sXgo4ea1oyyR40CmY0ejfp5iR
     skip_symbols: true
     artifact: choco_package
-    on:
-      appveyor_repo_tag: true
-#on_finish:
-#  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+# on_finish:
+ # - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
