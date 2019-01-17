@@ -33,9 +33,5 @@ deploy:
       secure: oRH3zh3/UFiw9MDGj7DXs9bCdUEhkXKBJw4C6nZucMPHuXkDJ5soBFLKVGZov+Do7yrbX+Wtjc4S1JU2c//yicLcQn1aUEWJttzjNIDSG7nzPNV/Or1JDxclK/kYqIXcXN0GbhWTHZseku9dRxnhvfl33/lRSmYN0y6JtZ2nBLWRn926IUF0zkNYRk9ytIsG6VOdHfMmZMK5Z68IBOLYetqp9paNMKr2daGv0LiRn8zVMGMVuDS2TLMbzz1Vh1OGRoZpL/cV+nnX2HVkiuH2Lv4Nb+3xYo5wZ23QLYBFR7VwQ8jKWVyRFwWBWD23eTy11HOkueSFOOzrX3ot3EQmtAMLG9a6DfHtVYXn3wvmiMKAt6VMBqoTqmlpmwfi48Gs7NzbHxLC6Np2DchRhE3ZnimpA1d05MYyuT/KBbRieiyXQeFs0TivF/3fbGEu4fmTXiJ0gYGx/hBuQHF0Iqk7GX+ry26Oo5yYG4+a/yJYGFhOShidKwlwf8SnBe2ZkngrhYDkelv+FWTBI9bnXMkeMqgzzUxYqQMQ4zvd20nefGpsQ/tuE3nWQCjZb1y/4lz4Vr7yaBEJZMto9Mnxvj5pg+1HAr/XNb5t4M/t5yH9du1Bw7b7vHmJzJrq7Hn8EkeORJFwJV8ORoiGDbIA2K6Zv27166Z4bA/+fTv5iO42bis=
     skip_cleanup: true
   - provider: script
-    script: |-
-      docker run -v $(pwd):$(pwd) --rm -t snapcore/snapcraft:stable sh -c "
-        cd snap &&
-        snapcraft push parsec_*.snap --release edge
-      "
+    script: bash deploy_snap.sh
     skip_cleanup: true
