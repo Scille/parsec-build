@@ -15,6 +15,7 @@ install:
   - "%python% --version"
 build_script:
   - set /p release_version=<version
+  - set release_version=%release_version:~0,32%
   - git clone https://github.com/Scille/parsec-cloud.git
   - cd parsec-cloud
   - git fetch
@@ -37,7 +38,7 @@ build_script:
   - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'CHECKSUM', (get-filehash Parsec_setup.exe).hash | Out-File choco\tools\chocolateyinstall.ps1"
   - "rename Parsec_setup.exe parsec_%release_version%_amd64.exe"
   - cd choco
-  - choco pack
+  - choco pack || exit 0
   - set original_release_version=%release_version%
   - set release_version=%release_version:~1%
 test: off
