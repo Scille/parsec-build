@@ -33,6 +33,7 @@ build_script:
   - del build\parsec.bat
   - "%makensis% parsec.nsi"
   - powershell -Command "(gc choco\parsec.nuspec) -creplace 'VERSION', '%release_version:~1%' | Out-File choco\parsec.nuspec"
+  - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'VERSION', '%release_version%' | Out-File choco\tools\chocolateyinstall.ps1"
   - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'CHECKSUM', (get-filehash Parsec_setup.exe).hash | Out-File choco\tools\chocolateyinstall.ps1"
   - "rename Parsec_setup.exe parsec_%release_version%_amd64.exe"
   - cd choco
