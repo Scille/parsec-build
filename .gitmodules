@@ -1,6 +1,0 @@
-[submodule "parsec-cloud"]
-	path = parsec-cloud
-	url = https://github.com/Scille/parsec-cloud.git
-[submodule "parsec-gui"]
-	path = parsec-gui
-	url = https://github.com/Scille/parsec-gui.git

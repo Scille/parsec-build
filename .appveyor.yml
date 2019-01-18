@@ -20,12 +20,10 @@ build_script:
   - cd parsec-cloud
   - git fetch
   - git checkout %release_version%
+  - echo __version__ = "%release_version%" > parsec/_version.py
   - "%pip% install .[core,backend] --process-dependency-links"
   - "%pip% install cx_freeze idna"
   - "%python% setup.py build"
-  # - copy parsec\core\gui\resources_rc.py build\exe.win-amd64-3.6\lib\parsec\core\gui\
-  # - copy parsec\core\gui\_resources_rc.py build\exe.win-amd64-3.6\lib\parsec\core\gui\
-  # - xcopy parsec\core\gui\ui build\exe.win-amd64-3.6\lib\parsec\core\gui\ui\
   - cd ..
   - mkdir build
   - move parsec-cloud\build\exe.win-amd64-3.6 build\core

@@ -1,5 +1,5 @@
 name: parsec
-version: v0.9.2
+version: VERSION
 summary: Secure cloud framework # 79 char long summary
 description: |
   Parsec is an open-source cloud-based application that allow simple yet
@@ -34,6 +34,7 @@ parts:
       snapcraftctl pull
       git pull
       git checkout $SNAPCRAFT_PROJECT_VERSION
+      echo __version__ = \"$SNAPCRAFT_PROJECT_VERSION\" >> parsec/_version.py
     override-build: |
       echo 'PYTHON VERSION: ' `python3.6 --version` `which python3.6`
 
