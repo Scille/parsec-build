@@ -30,7 +30,7 @@ build_script:
   - move parsec-cloud\build\exe.win-amd64-3.6 build\core
   - move build\core\parsec build\core\parsec.exe
   - cp parsec.bat build
-  - Bat_To_Exe_Converter.exe /bat build/parsec.bat /exe build/parsec.exe /invisible /icon parsec-gui/public/favicon.ico /x64
+  - Bat_To_Exe_Converter.exe /bat build/parsec.bat /exe build/parsec.exe /invisible /icon favicon.ico /x64
   - del build\parsec.bat
   - "%makensis% parsec.nsi"
   - powershell -Command "(gc choco\parsec.nuspec) -creplace 'VERSION', '%release_version:~1%' | Out-File choco\parsec.nuspec"
