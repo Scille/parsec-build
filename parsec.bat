@@ -3,4 +3,4 @@ set FUSE_LIBRARY_PATH=%programfiles(x86)%\WinFsp\bin\winfsp-x64.dll
 mkdir %APPDATA%\parsec 2> nul
 echo Starting parsec core >> "%APPDATA%"\parsec\parsec-core.log
 start powershell -Command "Get-Content %APPDATA%\parsec\parsec-core.log -Wait"
-core\parsec.exe core gui --log-level=DEBUG --log-file "%APPDATA%"\parsec\parsec-core.log
+core\parsec.exe core gui --log-level=INFO --log-file "%APPDATA%"\parsec\parsec-core.log
