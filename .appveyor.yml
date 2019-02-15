@@ -51,13 +51,13 @@ deploy:
   - provider: GitHub
     release: "%original_release_version%"
     auth_token:
-      secure: y5xGHULS9oFoq68eKGzYdHF+tM4N0pCatrjXRey7tMki2rTEFNF2tFZmGt58ZI3T
+      secure: qUh7EKphTKAccFvKdSQudizsOnj6GSvI3QdZVGKTEgOmDADKQjBvYQ4WiOK8ur72
     artifact: installer
     draft: false
   - provider: NuGet
     server: https://push.chocolatey.org/
     api_key:
-      secure: gZavVWTve5YMJ4SYsCMPvwuQRiG83GW2gpUnHU7sXgo4ea1oyyR40CmY0ejfp5iR
+      secure: OSr40DIKsX+IDfOyP6H7pAk8tXVVrfUSNzKRL1tXhOa/vZvG+a5tsbgPJyLYE6Ot
     skip_symbols: true
     artifact: choco_package
 # on_finish:
