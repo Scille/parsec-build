@@ -3,4 +3,5 @@
 mkdir -p ~/.config/parsec
 LOG_FILE=~/.config/parsec/parsec-core.log
 echo Starting parsec core >> $LOG_FILE
+export XDG_CURRENT_DESKTOP=unknown
 ${SNAP}/venv/bin/python -I -m parsec.cli core gui --log-level=INFO --log-file=$LOG_FILE
