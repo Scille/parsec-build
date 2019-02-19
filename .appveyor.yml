@@ -51,7 +51,7 @@ deploy:
   - provider: GitHub
     release: "%original_release_version%"
     auth_token:
-      secure: qUh7EKphTKAccFvKdSQudizsOnj6GSvI3QdZVGKTEgOmDADKQjBvYQ4WiOK8ur72
+      secure: lyNNIFX5PY8L2IxvWOp+dbc+oCXJ0dkc7jgqgc4BVfAT5RyeP6kalg/08dbKzOuU
     artifact: installer
     draft: false
   - provider: NuGet
