@@ -15,7 +15,7 @@
     <summary>parsec</summary>
     <description>Secure cloud framework</description>
     <dependencies>
-      <dependency id="winfsp" version="[1.3.18160]" />
+      <dependency id="winfsp" version="[1.4.19049]" />
     </dependencies>
   </metadata>
   <files>
