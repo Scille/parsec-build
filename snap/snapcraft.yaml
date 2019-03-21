@@ -50,6 +50,12 @@ parts:
       echo "PIP VERSION: " `pip --version`
       pip install .[core,backend,pkcs11] --target $SNAPCRAFT_PART_INSTALL/venv/lib/python3.6/site-packages
 
+      curl -sL https://sentry.io/get-cli/ | bash
+      export SENTRY_AUTH_TOKEN="8fde86885986423293eb09544e0553cc5dfc1a3bd0c54817866756b192f0793a"  # TODO reencrypt and remove token if build work
+      export SENTRY_ORG="scille"
+      sentry-cli releases new -p parsec $SNAPCRAFT_PROJECT_VERSION
+      sentry-cli releases set-commits --auto $SNAPCRAFT_PROJECT_VERSION
+
       sed -i "s#$SNAPCRAFT_PART_INSTALL#\$SNAP#g" $PYTHON_HOST_PATH/../pyvenv.cfg
       sed -i "s#$SNAPCRAFT_PART_INSTALL#\$SNAP#g" `find $PYTHON_HOST_PATH -type f`
       rm $PYTHON_HOST_PATH/python3.6
