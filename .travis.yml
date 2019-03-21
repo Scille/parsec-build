@@ -14,6 +14,15 @@ install:
 - sed -i '2d' snapcraft.yaml
 - sed -i "2iversion:\ $PARSEC_VERSION" snapcraft.yaml
 - cd ..
+- git clone https://github.com/Scille/parsec-cloud.git
+- cd parsec-cloud
+- curl -sL https://sentry.io/get-cli/ | bash
+- export SENTRY_AUTH_TOKEN="8fde86885986423293eb09544e0553cc5dfc1a3bd0c54817866756b192f0793a"  # TODO reencrypt and remove token if build work
+- export SENTRY_ORG="scille"
+- sentry-cli releases new -p parsec $SENTRY_RELEASE_TOKEN
+- sentry-cli releases set-commits --auto $SENTRY_RELEASE_TOKEN
+- cd ..
+
 script: |-
   docker run -v $(pwd):$(pwd) --rm -t snapcore/snapcraft:stable sh -c "
     apt update -qq &&
