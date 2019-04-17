@@ -33,7 +33,8 @@ parts:
       snapcraftctl pull
       git pull
       git checkout $SNAPCRAFT_PROJECT_VERSION
-      echo __version__ = \"$SNAPCRAFT_PROJECT_VERSION\" >> parsec/_version.py
+      echo __version__ = \"$SNAPCRAFT_PROJECT_VERSION\" > parsec/_version.py
+      echo __api_version__ = \"$SNAPCRAFT_PROJECT_VERSION\" >> parsec/_version.py
     override-build: |
       echo 'PYTHON VERSION: ' `python3.6 --version` `which python3.6`
 

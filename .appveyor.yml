@@ -22,6 +22,7 @@ build_script:
   - git fetch
   - git checkout %release_version%
   - echo __version__ = "%release_version%" > parsec/_version.py
+  - echo __api_version__ = "%release_version%" >> parsec/_version.py
   - "%pip% install .[core,backend] --process-dependency-links"
   - "%pip% install cx_freeze idna"
   - "%python% setup.py build"
