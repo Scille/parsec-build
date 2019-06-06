@@ -29,7 +29,9 @@ build_script:
   - mkdir build
   - move parsec-cloud\build\exe.win-amd64-3.6 build\core
   - move build\core\parsec build\core\parsec.exe
-  - cp build\core\lib\PyQt5\Qt\bin\vcruntime140.dll build\core
+  - cp build\core\lib\PyQt5\Qt5Core.dll build\core
+  - cp build\core\lib\PyQt5\Qt5Gui.dll build\core
+  - cp build\core\lib\PyQt5\Qt5Widgets.dll build\core
   - cp parsec.bat build
   - Bat_To_Exe_Converter.exe /bat build/parsec.bat /exe build/parsec.exe /invisible /icon favicon.ico /x64
   - del build\parsec.bat
