@@ -10,8 +10,8 @@ branches:
   only:
   - master
 skip_tags: true
-# init:
- # - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+init:
+ - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 install:
   - "%python% --version"
 build_script:
@@ -61,5 +61,5 @@ deploy:
       secure: OSr40DIKsX+IDfOyP6H7pAk8tXVVrfUSNzKRL1tXhOa/vZvG+a5tsbgPJyLYE6Ot
     skip_symbols: true
     artifact: choco_package
-# on_finish:
- # - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+on_finish:
+ - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
