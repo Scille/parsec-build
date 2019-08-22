@@ -139,6 +139,7 @@ Section "Uninstall"
   DeleteRegKey HKCU "Software\Wow6432Node\CLSID\{${APPGUID}"
   DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}"
   DeleteRegKey HKCU "Software\Microsoft\CurrentVersion\Explorer\Desktop\HideDesktopIcons\NewStartPanel\{${APPGUID}"
+  ClearErrors
 
 SectionEnd
 
