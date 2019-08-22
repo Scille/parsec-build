@@ -5,7 +5,7 @@ image: Visual Studio 2017
 environment:
   python: C:\Python36-x64\python.exe
   pip: C:\Python36-x64\Scripts\pip
-  makensis: C:\PROGRA~2\NSIS\makensis.exe
+  nsis: C:\PROGRA~2\NSIS
   TCL_LIBRARY: C:\Python36-x64\tcl\tcl8.6
   TK_LIBRARY: C:\Python36-x64\tcl\tk8.6
 branches:
@@ -32,7 +32,9 @@ build_script:
   - cd ..
   - move parsec-cloud\build\exe.win-amd64-3.6 build
   - cp build\lib\PyQt5\Qt\bin\vcruntime140.dll build
-  - "%makensis% parsec.nsi"
+  - cp nsProcess\nsProcess.dll "%nsis%\Plugins\x86-ansi"
+  - cp nsProcess\nsProcess.nsh "%nsis%\Include"
+  - "%nsis%\\makensis.exe parsec.nsi"
   - powershell -Command "(gc choco\parsec.nuspec) -creplace 'VERSION', '%release_version:~1%' | Out-File choco\parsec.nuspec"
   - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'VERSION', '%release_version%' | Out-File choco\tools\chocolateyinstall.ps1"
   - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'CHECKSUM', (get-filehash Parsec_setup.exe).hash | Out-File choco\tools\chocolateyinstall.ps1"
