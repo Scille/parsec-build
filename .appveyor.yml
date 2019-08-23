@@ -26,15 +26,14 @@ build_script:
   - echo __version__ = "%release_version%" >> parsec/_version.py
   - "%pip% install .[core,backend] --process-dependency-links"
   - "%pip% install cx_freeze idna"
+  - cp ..\parsec.py parsec
+  - cp ..\favicon.ico .
+  - powershell -Command "(gc setup.py) -creplace 'parsec/cli.py', 'parsec/parsec.py' | Out-File setup.py -Encoding ascii"
+  - powershell -Command "(gc setup.py) -creplace 'targetName=\"parsec\"', 'targetName=\"parsec.exe\", base=\"Win32GUI\", icon=\"../favicon.ico\"' | Out-File setup.py -Encoding ascii"
   - "%python% setup.py build"
   - cd ..
-  - mkdir build
-  - move parsec-cloud\build\exe.win-amd64-3.6 build\core
-  - move build\core\parsec build\core\parsec.exe
-  - cp build\core\lib\PyQt5\Qt\bin\vcruntime140.dll build\core
-  - cp parsec.bat build
-  - Bat_To_Exe_Converter.exe /bat build/parsec.bat /exe build/parsec.exe /invisible /icon favicon.ico /x64
-  - del build\parsec.bat
+  - move parsec-cloud\build\exe.win-amd64-3.6 build
+  - cp build\lib\PyQt5\Qt\bin\vcruntime140.dll build
   - "%makensis% parsec.nsi"
   - powershell -Command "(gc choco\parsec.nuspec) -creplace 'VERSION', '%release_version:~1%' | Out-File choco\parsec.nuspec"
   - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'VERSION', '%release_version%' | Out-File choco\tools\chocolateyinstall.ps1"
