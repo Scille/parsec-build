@@ -1,6 +1,7 @@
 !define COMPANYNAME "Scille"
 !define APPNAME "Parsec"
 !define ABOUTURL "http://www.parsec.cloud"
+!define APPGUID "6C37F945-7EFC-480A-A444-A6D44A3D107F"
 
 ;--------------------------------
 ;Includes
@@ -37,8 +38,8 @@
 ;--------------------------------
 ;Start Menu Folder Page Configuration
 
-  !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU" 
-  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${APPNAME}" 
+  !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
+  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${APPNAME}"
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${APPNAME}"
 
 ;--------------------------------
@@ -55,10 +56,10 @@
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
   !insertmacro MUI_UNPAGE_FINISH
-  
+
 ;--------------------------------
 ;Languages
- 
+
   !insertmacro MUI_LANGUAGE "English"
 
 ;--------------------------------
@@ -134,24 +135,30 @@ Section "Uninstall"
   DeleteRegKey /ifempty HKCU "Software\Parsec"
   DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}"
 
+  DeleteRegKey HKCU "Software\Classes\CLSID\{${APPGUID}}"
+  DeleteRegKey HKCU "Software\Wow6432Node\CLSID\{${APPGUID}"
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}"
+  DeleteRegKey HKCU "Software\Microsoft\CurrentVersion\Explorer\Desktop\HideDesktopIcons\NewStartPanel\{${APPGUID}"
+  ClearErrors
+
 SectionEnd
 
 ;--------------------------------
 ;Initialization Section
 
 Function .onInit
- 
+
   ReadRegStr $R0 HKLM \
   "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" \
   "UninstallString"
   StrCmp $R0 "" done
- 
+
   MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
   "${APPNAME} is already installed. $\n$\nClick `OK` to remove the \
   previous version or `Cancel` to cancel this upgrade." \
   /SD IDOK IDOK uninst
   Abort
- 
+
 ;Run the uninstaller
   uninst:
     ClearErrors
@@ -160,5 +167,5 @@ Function .onInit
     Goto +2
     Exec "$R0 /S"
   done:
- 
+
 FunctionEnd
