@@ -28,8 +28,8 @@ build_script:
   - "%pip% install cx_freeze idna"
   - cp ..\parsec.py parsec
   - cp ..\favicon.ico .
-  - powershell -Command "(gc setup.py) -creplace 'parsec/cli.py', 'parsec/parsec.py' | Out-File setup.py -Encoding ascii"
-  - powershell -Command "(gc setup.py) -creplace 'targetName=\"parsec\"', 'targetName=\"parsec.exe\", base=\"Win32GUI\", icon=\"../favicon.ico\"' | Out-File setup.py -Encoding ascii"
+  - powershell -Command "(gc setup.py) -creplace 'parsec/cli.py', 'parsec/parsec.py' | Out-File setup.py -Encoding UTF8"
+  - powershell -Command "(gc setup.py) -creplace 'targetName=\"parsec\"', 'targetName=\"parsec.exe\", base=\"Win32GUI\", icon=\"../favicon.ico\"' | Out-File setup.py -Encoding UTF8"
   - "%python% setup.py build"
   - cd ..
   - move parsec-cloud\build\exe.win-amd64-3.6 build
