@@ -8,6 +8,7 @@
 
   !include "FileFunc.nsh"
   !include "MUI2.nsh"
+  !include "nsProcess.nsh"
 
 ;--------------------------------
 ;General
@@ -148,24 +149,30 @@ SectionEnd
 
 Function .onInit
 
-  ReadRegStr $R0 HKLM \
-  "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" \
-  "UninstallString"
-  StrCmp $R0 "" done
+  ${nsProcess::FindProcess} "parsec.exe" $R0
+  IntCmp $R0 1 0 0 notRunning
+    MessageBox MB_OK|MB_ICONEXCLAMATION "Parsec is running. Please close it first!" /SD IDOK
+    Abort
 
-  MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-  "${APPNAME} is already installed. $\n$\nClick `OK` to remove the \
-  previous version or `Cancel` to cancel this upgrade." \
-  /SD IDOK IDOK uninst
-  Abort
+  notRunning: 
+    ReadRegStr $R0 HKLM \
+    "Software\Microsoft\Windows\CurrentVersion\Uninstall\${APPNAME}" \
+    "UninstallString"
+    StrCmp $R0 "" done
+ 
+    MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+    "${APPNAME} is already installed. $\n$\nClick `OK` to remove the \
+    previous version or `Cancel` to cancel this upgrade." \
+    /SD IDOK IDOK uninst
+    Abort
 
-;Run the uninstaller
-  uninst:
-    ClearErrors
-    IfSilent +3
-    Exec $R0
-    Goto +2
-    Exec "$R0 /S"
-  done:
-
+    ;Run the uninstaller
+    uninst:
+      ClearErrors
+      IfSilent +3
+      Exec $R0
+      Goto +2
+      Exec "$R0 /S"
+    done:
+ 
 FunctionEnd
