@@ -51,6 +51,11 @@
   !insertmacro MUI_PAGE_DIRECTORY
   !insertmacro MUI_PAGE_INSTFILES
   !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
+    !define MUI_FINISHPAGE_NOAUTOCLOSE
+    !define MUI_FINISHPAGE_RUN
+    !define MUI_FINISHPAGE_RUN_NOTCHECKED
+    !define MUI_FINISHPAGE_RUN_TEXT "Create a desktop shortcut"
+    !define MUI_FINISHPAGE_RUN_FUNCTION "CreateDesktopShortcut"
   !insertmacro MUI_PAGE_FINISH
 
   !insertmacro MUI_UNPAGE_WELCOME
@@ -129,6 +134,7 @@ Section "Uninstall"
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
 
+  Delete "$DESKTOP\${APPNAME}.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\Parsec.lnk"
   Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall.lnk"
   RMDir "$SMPROGRAMS\$StartMenuFolder"
@@ -175,4 +181,8 @@ Function .onInit
       Exec "$R0 /S"
     done:
  
+FunctionEnd
+
+Function "CreateDesktopShortcut"
+  CreateShortcut "$DESKTOP\${APPNAME}.lnk" "$INSTDIR\parsec.exe"
 FunctionEnd
