@@ -18,49 +18,32 @@ install:
   - "%python% --version"
 build_script:
   - set /p release_version=<version
-  - set release_version=%release_version:~0,32%
-  - git clone https://github.com/Scille/parsec-cloud.git
-  - cd parsec-cloud
-  - git fetch
-  - git checkout %release_version%
-  - echo __version__ = "%release_version%" >> parsec/_version.py
-  - "%pip% install .[core,backend] --process-dependency-links"
-  - "%pip% install cx_freeze idna"
-  - cp ..\parsec.py parsec
-  - cp ..\favicon.ico .
-  - "%python% setup.py build"
-  - cd ..
-  - move parsec-cloud\build\exe.win-amd64-3.6 build
-  - cp build\lib\PyQt5\Qt\bin\vcruntime140.dll build
-  - cp nsProcess\nsProcess.dll "%nsis%\Plugins\x86-ansi"
-  - cp nsProcess\nsProcess.nsh "%nsis%\Include"
-  - "%nsis%\\makensis.exe parsec.nsi"
-  - powershell -Command "(gc choco\parsec.nuspec) -creplace 'VERSION', '%release_version:~1%' | Out-File choco\parsec.nuspec"
-  - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'VERSION', '%release_version%' | Out-File choco\tools\chocolateyinstall.ps1"
-  - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'CHECKSUM', (get-filehash Parsec_setup.exe).hash | Out-File choco\tools\chocolateyinstall.ps1"
-  - "rename Parsec_setup.exe parsec_%release_version%_amd64.exe"
-  - cd choco
-  - choco pack || exit 0
-  - set original_release_version=%release_version%
-  - set release_version=%release_version:~1%
+  - cd win32
+  - python freeze_parsec.py %release_version%
+  - "%nsis%\\makensis.exe installer.nsi"
+  # - powershell -Command "(gc choco\parsec.nuspec) -creplace 'VERSION', '%release_version:~1%' | Out-File choco\parsec.nuspec"
+  # - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'VERSION', '%release_version%' | Out-File choco\tools\chocolateyinstall.ps1"
+  # - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'CHECKSUM', (get-filehash Parsec_setup.exe).hash | Out-File choco\tools\chocolateyinstall.ps1"
+  # - cd choco
+  # - choco pack || exit 0
 test: off
 artifacts:
-  - path: "parsec_%original_release_version%_amd64.exe"
+  - path: 'parsec-*-setup.exe'
     name: installer
-  - path: "choco/parsec-cloud.%release_version%.nupkg"
-    name: choco_package
+  # - path: "choco/parsec-cloud.%release_version%.nupkg"
+  #   name: choco_package
 deploy:
   - provider: GitHub
-    release: "%original_release_version%"
+    release: "%release_version%"
     auth_token:
       secure: lyNNIFX5PY8L2IxvWOp+dbc+oCXJ0dkc7jgqgc4BVfAT5RyeP6kalg/08dbKzOuU
     artifact: installer
     draft: false
-  - provider: NuGet
-    server: https://push.chocolatey.org/
-    api_key:
-      secure: OSr40DIKsX+IDfOyP6H7pAk8tXVVrfUSNzKRL1tXhOa/vZvG+a5tsbgPJyLYE6Ot
-    skip_symbols: true
-    artifact: choco_package
+  # - provider: NuGet
+  #   server: https://push.chocolatey.org/
+  #   api_key:
+  #     secure: OSr40DIKsX+IDfOyP6H7pAk8tXVVrfUSNzKRL1tXhOa/vZvG+a5tsbgPJyLYE6Ot
+  #   skip_symbols: true
+  #   artifact: choco_package
 on_finish:
  - ps: if($env:DEBUG -eq "true") { $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1')) }
