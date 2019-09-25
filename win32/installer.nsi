@@ -95,6 +95,7 @@ Var StartMenuFolder
 
 # Check for running Parsec instance.
 Function .onInit
+  StrCpy $INSTDIR "C:\Program Files\Parsec"
 
   ${nsProcess::FindProcess} "parsec.exe" $R0
   IntCmp $R0 1 0 0 notRunning

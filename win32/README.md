@@ -4,12 +4,6 @@ NSIS installer for parsec
 Inspired by (Deluge NSIS installer)[https://github.com/deluge-torrent/deluge/blob/3f9ae337932da550f2623daa6dedd9c3e0e5cfb3/packaging/win32/Win32%20README.txt]
 
 
-Dependencies
-------------
- * CX-Freeze: http://pypi.python.org/pypi/cx-freeze
- * NSIS: http://nsis.sourceforge.net/Download
-
-
 Build steps
 -----------
 

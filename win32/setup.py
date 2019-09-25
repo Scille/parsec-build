@@ -6,34 +6,36 @@ import pkgutil
 
 
 base = None
-if sys.platform == 'win32':
-    base = 'Win32GUI'
+if sys.platform == "win32":
+    base = "Win32GUI"
 
 
 options = {
-    'build_exe': {
+    "build_exe": {
         "packages": [
             "sentry_sdk.integrations",
             "trio._core",
         ],
-        'includes': 'atexit',
-        "include_msvcr": True
+        "includes": "atexit",
+        "include_msvcr": True,
+        # See https://github.com/anthony-tuininga/cx_Freeze/issues/504
+        "include_files": "python3.dll"
     }
 }
 
 
 executables = [
     Executable(
-        'parsec-bootstrap.py',
+        "parsec-bootstrap.py",
         base=base,
         targetName="parsec.exe",
-        icon='parsec.ico'
+        icon="parsec.ico"
     )
 ]
 
-setup(name='parsec',
-      version='1.0.0',
-      description='Parsec secure cloud sharing',
+setup(name="parsec",
+      version="1.0.0",
+      description="Parsec secure cloud sharing",
       options=options,
       executables=executables
       )
