@@ -10,7 +10,7 @@ init:
  - ps: if($env:DEBUG -eq "true") { iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1')) }
 build_script:
   - set /p release_version=<version
-  - set PATH=C:\Python36-x64;%PATH%
+  - set PATH=C:\Python36;%PATH%
   - python --version
   - cd win32
   - python freeze_parsec.py %release_version%
