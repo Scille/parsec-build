@@ -7,7 +7,7 @@ description: |
 type: app
 
 confinement: classic # classic is needed to have fuse working
-icon: "../scripts/bin/parsec.png"
+icon: "./bin/parsec.png"
 grade: stable # must be 'stable' to release into candidate/stable channels
 
 apps:
@@ -24,7 +24,7 @@ apps:
 parts:
   bootstrap:
     plugin: dump
-    source: "../scripts/bin"
+    source: "./bin"
 
   parsec-core:
     plugin: dump
