@@ -5,13 +5,22 @@ image: Visual Studio 2017
 branches:
   only:
   - master
+environment:
+  VISUAL_CONFIGURE_SCRIPT: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Auxiliary\\Build\\vcvarsall.bat"
+  matrix:
+    - VISUALCONFIG: "x86"
+      PYTHON_DIR: "C:\\Python36"
+    - VISUALCONFIG: "amd64"
+      PYTHON_DIR: "C:\\Python36-x64"
 skip_tags: true
 init:
  - ps: if($env:DEBUG -eq "true") { iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1')) }
 build_script:
   - set /p release_version=<version
-  - set PATH=C:\Python36;%PATH%
+  - set PATH=%PYTHON_DIR%;%PATH%
+  - call "%VISUAL_CONFIGURE_SCRIPT%" %VISUALCONFIG%
   - python --version
+  - cl.exe
   - cd win32
   - python freeze_parsec.py %release_version%
   - C:\PROGRA~2\NSIS\makensis.exe installer.nsi
