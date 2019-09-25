@@ -11,6 +11,7 @@
 # Parsec program information
 !define PROGRAM_NAME "Parsec"
 !define PROGRAM_WEB_SITE "http://parsec.cloud"
+!define APPGUID "6C37F945-7EFC-480A-A444-A6D44A3D107F"
 
 # Detect version from file
 !define BUILD_DIR "build"
@@ -52,18 +53,22 @@ SetCompressorDictSize 64
 # Start Menu Folder Page Configuration
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER ${PROGRAM_NAME}
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCR"
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Parsec"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${PROGRAM_NAME}"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
 # Uninstaller
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 !define MUI_HEADERIMAGE_UNBITMAP "installer-top.bmp"
 !define MUI_WELCOMEFINISHPAGE_UNBITMAP "installer-side.bmp"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
-
+# Add shortcut
 !define MUI_FINISHPAGE_SHOWREADME ""
 !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
 !define MUI_FINISHPAGE_SHOWREADME_TEXT "Create Desktop Shortcut"
-!define MUI_FINISHPAGE_SHOWREADME_FUNCTION finishpageaction
+!define MUI_FINISHPAGE_SHOWREADME_FUNCTION CreateDesktopShortcut
+# Run Parsec after install
+!define MUI_FINISHPAGE_RUN "$INSTDIR\parsec.exe"
+!define MUI_FINISHPAGE_RUN_TEXT "Run Parsec"
+!define MUI_FINISHPAGE_RUN_NOTCHECKED
 
 # --- Start of Modern User Interface ---
 Var StartMenuFolder
@@ -129,7 +134,7 @@ Function un.onInit
     Abort
 FunctionEnd
 
-Function finishpageaction
+Function CreateDesktopShortcut
     CreateShortCut "$DESKTOP\Parsec.lnk" "$INSTDIR\parsec.exe"
 FunctionEnd
 
@@ -258,6 +263,13 @@ Section Uninstall
     DeleteRegKey ${PROGRAM_UNINST_ROOT_KEY} "${PROGRAM_UNINST_KEY}"
     # This key is only used by Parsec, so we should always delete it
     DeleteRegKey HKCR "Parsec"
+
+  # Explorer shortcut keys potentially set by the application's settings
+  DeleteRegKey HKCU "Software\Classes\CLSID\{${APPGUID}}"
+  DeleteRegKey HKCU "Software\Wow6432Node\CLSID\{${APPGUID}"
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}"
+  DeleteRegKey HKCU "Software\Microsoft\CurrentVersion\Explorer\Desktop\HideDesktopIcons\NewStartPanel\{${APPGUID}"
+
 SectionEnd
 
 # Add version info to installer properties.
