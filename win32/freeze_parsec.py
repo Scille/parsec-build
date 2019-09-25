@@ -64,7 +64,7 @@ def main():
     run(f"{VENV_DIR / 'Scripts/python'} setup.py build_exe")
 
     # # Rename output directory
-    to_move_target, = BUILD_DIR.glob('exe.win32-*')
+    to_move_target, = BUILD_DIR.glob('exe.win*')
     target_final = BUILD_DIR / f'parsec-{parsec_verbose_version}-{get_archslug()}'
     to_move_target.rename(target_final)
 
