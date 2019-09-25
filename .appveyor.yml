@@ -15,10 +15,11 @@ skip_tags: true
 init:
  - ps: if($env:DEBUG -eq "true") { iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1')) }
 build_script:
-  - "%python% --version"
   - set /p release_version=<version
+  - set PATH=%PYTHON%;%PATH%
+  - python --version
   - cd win32
-  - "%python% freeze_parsec.py %release_version%"
+  - python freeze_parsec.py %release_version%
   - "%nsis%\\makensis.exe installer.nsi"
   # - powershell -Command "(gc choco\parsec.nuspec) -creplace 'VERSION', '%release_version:~1%' | Out-File choco\parsec.nuspec"
   # - powershell -Command "(gc choco\tools\chocolateyinstall.ps1) -creplace 'VERSION', '%release_version%' | Out-File choco\tools\chocolateyinstall.ps1"
