@@ -22,7 +22,7 @@ build_script:
   # - choco pack || exit 0
 test: off
 artifacts:
-  - path: 'parsec-*-setup.exe'
+  - path: 'win32/build/parsec-*-setup.exe'
     name: installer
   # - path: "choco/parsec-cloud.%release_version%.nupkg"
   #   name: choco_package
