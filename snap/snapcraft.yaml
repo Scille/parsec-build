@@ -48,7 +48,7 @@ parts:
       export LC_ALL="en_US.UTF-8"
       curl https://bootstrap.pypa.io/get-pip.py | python3.6
       echo "PIP VERSION: " `pip --version`
-      pip install .[core,backend,pkcs11] --target $SNAPCRAFT_PART_INSTALL/venv/lib/python3.6/site-packages
+      pip install .[core] --target $SNAPCRAFT_PART_INSTALL/venv/lib/python3.6/site-packages
 
       sed -i "s#$SNAPCRAFT_PART_INSTALL#\$SNAP#g" $PYTHON_HOST_PATH/../pyvenv.cfg
       sed -i "s#$SNAPCRAFT_PART_INSTALL#\$SNAP#g" `find $PYTHON_HOST_PATH -type f`
