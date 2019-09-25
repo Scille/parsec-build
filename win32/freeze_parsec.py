@@ -35,7 +35,8 @@ def main():
     # Bootstrap parsec-cloud git repo
     if not PARSEC_REPO_DIR.is_dir():
         print("Clone Parsec repo")
-        run(f"git clone {PARSEC_REPO_URL} --branch {parsec_tag} {PARSEC_REPO_DIR}")
+        run(f"git clone --no-checkout {PARSEC_REPO_URL} {PARSEC_REPO_DIR}")
+        run(f"git -C {PARSEC_REPO_DIR} checkout {parsec_tag}")
 
     # Patch parsec.__version__ according to git commit
     ret = run(f"git -C {PARSEC_REPO_DIR} describe --tag", stdout=subprocess.PIPE)
