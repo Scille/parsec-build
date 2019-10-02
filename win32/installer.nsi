@@ -224,14 +224,49 @@ Section "Associate parsec:// URI links with Parsec" Section3
     WriteRegStr HKCR "Parsec\shell\open\command" "" '"$INSTDIR\parsec.exe" "%1"'
 SectionEnd
 
+Section "Add a link pointing to the mountpoint in Windows Explorer" Section4
+    DeleteRegKey HKCU "Software\Classes\CLSID\{${APPGUID}}"
+    DeleteRegKey HKCU "Software\Wow6432Node\CLSID\{${APPGUID}}"
+    DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}}"
+    DeleteRegKey HKCU "Software\Microsoft\CurrentVersion\Explorer\Desktop\HideDesktopIcons\NewStartPanel\{${APPGUID}}"
+
+    WriteRegStr HKCU "Software\Classes\CLSID\{${APPGUID}}" "" "Parsec"
+    WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}" "SortOrderIndex" 0x42
+    WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}" "System.IsPinnedToNamespaceTree" 0x1
+    WriteRegStr HKCU "Software\Classes\CLSID\{${APPGUID}}\DefaultIcon" "" "$INSTDIR\parsec.exe,0"
+    WriteRegExpandStr HKCU "Software\Classes\CLSID\{${APPGUID}}\InProcServer32" "" "%SYSTEMROOT%\system32\shell32.dll"
+    WriteRegStr HKCU "Software\Classes\CLSID\{${APPGUID}}\Instance" "CLSID" "{0E5AAE11-A475-4c5b-AB00-C66DE400274E}"
+    WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "Attributes" 0x11
+    WriteRegStr HKCU "Software\Classes\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "TargetFolderPath" "$APPDATA\${PROGRAM_NAME}\mnt"
+    WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}\ShellFolder" "Attributes" 0xf080004d
+    WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}\ShellFolder" "FolderValueFlags" 0x28
+
+    WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}" "" "Parsec"
+    WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}" "SortOrderIndex" 0x42
+    WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}" "System.IsPinnedToNamespaceTree" 0x1
+    WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\DefaultIcon" "" "$INSTDIR\parsec.exe,0"
+    WriteRegExpandStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\InProcServer32" "" "%SYSTEMROOT%\SysWow64\shell32.dll"
+    WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\Instance" "CLSID" "{0E5AAE11-A475-4c5b-AB00-C66DE400274E}"
+    WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "Attributes" 0x11
+    WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "TargetFolderPath" "$APPDATA\${PROGRAM_NAME}\mnt"
+    WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\ShellFolder" "Attributes" 0xf080004d
+    WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\ShellFolder\FolderValueFlags REG_DWORD 0x28
+
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}}" "" "${PROGRAM_NAME}"
+
+    WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" "{${APPGUID}}" 0x1
+SectionEnd
+
 LangString DESC_Section1 ${LANG_ENGLISH} "Install Parsec."
 LangString DESC_Section2 ${LANG_ENGLISH} "Install WinFSP."
 LangString DESC_Section3 ${LANG_ENGLISH} "Let Parsec handle parsec:// URI links from the web-browser."
+LangString DESC_Section4 ${LANG_ENGLISH} "Add a link pointing to the mountpoint in the Windows Explorer."
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${Section1} $(DESC_Section1)
     !insertmacro MUI_DESCRIPTION_TEXT ${Section2} $(DESC_Section2)
     !insertmacro MUI_DESCRIPTION_TEXT ${Section3} $(DESC_Section3)
+    !insertmacro MUI_DESCRIPTION_TEXT ${Section4} $(DESC_Section4)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 # Create uninstaller.
