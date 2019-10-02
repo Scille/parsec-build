@@ -57,7 +57,9 @@ parts:
     stage-packages:
       - python3.6
       - python3.6-dev
-      - libc6
+      - libxext6
+      - libx11-6
+      - libx11-xcb1
     build-packages:
       - curl
       - locales
