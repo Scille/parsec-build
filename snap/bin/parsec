@@ -4,4 +4,11 @@ mkdir -p ~/.config/parsec
 LOG_FILE=~/.config/parsec/parsec-core.log
 echo Starting parsec core >> $LOG_FILE
 export XDG_CURRENT_DESKTOP=unknown
-${SNAP}/venv/bin/python -I -m parsec.cli core gui --log-level=INFO --log-file=$LOG_FILE
+PYTHON=${SNAP}/venv/bin/python
+# SNAP env variable is used by Qt to determine we are within a sandbox
+# and hence should use xdg-desktop-portal. However this is broken
+# (see https://github.com/Scille/parsec-cloud/issues/702) so we bypass this
+# and fallback to xdg-open which is fine given we use snap in classic mode
+# (i.e. without sandbox).
+unset SNAP
+$PYTHON -I -m parsec.cli core gui --log-level=INFO --log-file=$LOG_FILE
