@@ -213,6 +213,7 @@ SectionEnd
 Section "WinFSP" Section2
     ClearErrors
     ReadRegStr $0 HKCR "Installer\Dependencies\WinFsp" "Version"
+    MessageBox MB_OK|MB_ICONEXCLAMATION "WinFSP version $0" /SD IDOK
     ${If} ${Errors}
         # WinFSP is not installed
         SetOutPath "$TEMP"
@@ -222,6 +223,7 @@ Section "WinFSP" Section2
     ${Else}
         ${VersionCompare} ${0} "1.4.0" $R0
         ${VersionCompare} ${0} "2.0.0" $R1
+        MessageBox MB_OK|MB_ICONEXCLAMATION "Version compare results $R0 $R1" /SD IDOK
         ${If} $R0 == 2
             ${OrIf} $R1 == 1
                 ${OrIf} $R1 == 0
