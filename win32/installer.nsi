@@ -210,10 +210,27 @@ Section "Parsec Secure Cloud Sharing" Section1
 SectionEnd
 
 Section "WinFSP" Section2
-    SetOutPath "$TEMP"
-    File ${WINFSP_INSTALLER}
-    ExecWait "msiexec /i ${WINFSP_INSTALLER}"
-    Delete ${WINFSP_INSTALLER}
+    ClearErrors
+    ReadRegStr $0 HKCR "Installer\Dependencies\WinFsp" "Version"
+    ${If} ${Errors}
+        # WinFSP is not installed
+        SetOutPath "$TEMP"
+        File ${WINFSP_INSTALLER}
+        ExecWait "msiexec /i ${WINFSP_INSTALLER}"
+        Delete ${WINFSP_INSTALLER}
+    ${Else}
+        ${VersionCompare} ${0} "1.4.0" $R0
+        ${VersionCompare} ${0} "2.0.0" $R1
+        ${If} $R0 == 2
+            ${OrIf} $R1 == 1
+                ${OrIf} $R1 == 0
+                    # Incorrect WinSFP version (<1.4.0 or >=2.0.0)
+                    SetOutPath "$TEMP"
+                    File ${WINFSP_INSTALLER}
+                    ExecWait "msiexec /i ${WINFSP_INSTALLER}"
+                    Delete ${WINFSP_INSTALLER}
+        ${EndIf}
+    ${EndIf}
 SectionEnd
 
 # Create parsec:// uri association.
