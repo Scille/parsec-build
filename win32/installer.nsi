@@ -221,9 +221,9 @@ Section "WinFSP" Section2
         ExecWait "msiexec /i ${WINFSP_INSTALLER}"
         Delete ${WINFSP_INSTALLER}
     ${Else}
-        ${VersionCompare} ${0} "1.4.0" $R0
-        ${VersionCompare} ${0} "2.0.0" $R1
-        MessageBox MB_OK|MB_ICONEXCLAMATION "Version compare results $R0 $R1" /SD IDOK
+        ${VersionCompare} $0 "1.4.0" $R0
+        ${VersionCompare} $0 "2.0.0" $R1
+        MessageBox MB_OK|MB_ICONEXCLAMATION "Version compare results $0 $R0 $R1" /SD IDOK
         ${If} $R0 == 2
             ${OrIf} $R1 == 1
                 ${OrIf} $R1 == 0
