@@ -4,6 +4,7 @@
 !addplugindir nsis_plugins
 !addincludedir nsis_plugins
 !include "nsProcess.nsh"
+!include "WordFunc.nsh"
 
 # Script version; displayed when running the installer
 !define PARSEC_INSTALLER_VERSION "1.0"
