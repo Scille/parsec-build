@@ -232,6 +232,7 @@ Section "WinFSP" Section2
                     # Incorrect WinSFP version (<1.4.0 or >=2.0.0)
                     !insertmacro InstallWINFSP
         ${Else}
+            MessageBox MB_ICONINFORMATION|MB_OK "Unselect the section maybe ?" /SD IDOK
             !insertmacro UnSelectSection ${Section2} 
         ${EndIf}
     ${EndIf}
