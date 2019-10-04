@@ -210,32 +210,26 @@ Section "Parsec Secure Cloud Sharing" Section1
     !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
-!macro InstallWINFSP
+!macro TestWINFSP
+    ClearErrors
+    ReadRegStr $0 HKCR "Installer\Dependencies\WinFsp" "Version"
+    ${IfNot} ${Errors}
+        # WinFSP is installed
+        ${VersionCompare} $0 "1.3.0" $R0
+        ${VersionCompare} $0 "2.0.0" $R1
+        ${If} $R0 == 1
+            ${AndIf} $R1 == 2
+                # Correct WinFSP version, unselecting
+                !insertmacro UnSelectSection ${Section2} 
+        ${EndIf}            
+    ${EndIf}
+!macroend
+
+Section "WinFSP" Section2
     SetOutPath "$TEMP"
     File ${WINFSP_INSTALLER}
     ExecWait "msiexec /i ${WINFSP_INSTALLER}"
     Delete ${WINFSP_INSTALLER}
-!macroend
-
-Section "WinFSP" Section2
-    ClearErrors
-    ReadRegStr $0 HKCR "Installer\Dependencies\WinFsp" "Version"
-    ${If} ${Errors}
-        # WinFSP is not installed
-        !insertmacro InstallWINFSP
-    ${Else}
-        ${VersionCompare} $0 "1.3.0" $R0
-        ${VersionCompare} $0 "2.0.0" $R1
-        ${If} $R0 == 2
-            ${OrIf} $R1 == 1
-                ${OrIf} $R1 == 0
-                    # Incorrect WinSFP version (<1.4.0 or >=2.0.0)
-                    !insertmacro InstallWINFSP
-        ${Else}
-            MessageBox MB_ICONINFORMATION|MB_OK "Unselect the section maybe ?" /SD IDOK
-            !insertmacro UnSelectSection ${Section2} 
-        ${EndIf}
-    ${EndIf}
 SectionEnd
 
 # Create parsec:// uri association.
@@ -287,6 +281,7 @@ LangString DESC_Section4 ${LANG_ENGLISH} "Add a link pointing to the mountpoint 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${Section1} $(DESC_Section1)
     !insertmacro MUI_DESCRIPTION_TEXT ${Section2} $(DESC_Section2)
+    !insertmacro TestWINFSP
     !insertmacro MUI_DESCRIPTION_TEXT ${Section3} $(DESC_Section3)
     !insertmacro MUI_DESCRIPTION_TEXT ${Section4} $(DESC_Section4)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
