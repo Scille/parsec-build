@@ -232,7 +232,7 @@ Section "WinFSP" Section2
                     # Incorrect WinSFP version (<1.4.0 or >=2.0.0)
                     !insertmacro InstallWINFSP
         ${Else}
-            ${UnselectSection} ${Section2} 
+            !insertmacro UnSelectSection ${Section2} 
         ${EndIf}
     ${EndIf}
 SectionEnd
