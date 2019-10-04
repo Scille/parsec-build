@@ -210,15 +210,19 @@ Section "Parsec Secure Cloud Sharing" Section1
     !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
+!macro InstallWINFSP
+    SetOutPath "$TEMP"
+    File ${WINFSP_INSTALLER}
+    ExecWait "msiexec /i ${WINFSP_INSTALLER}"
+    Delete ${WINFSP_INSTALLER}
+!macroend
+
 Section "WinFSP" Section2
     ClearErrors
     ReadRegStr $0 HKCR "Installer\Dependencies\WinFsp" "Version"
     ${If} ${Errors}
         # WinFSP is not installed
-        SetOutPath "$TEMP"
-        File ${WINFSP_INSTALLER}
-        ExecWait "msiexec /i ${WINFSP_INSTALLER}"
-        Delete ${WINFSP_INSTALLER}
+        !insertmacro InstallWINFSP
     ${Else}
         ${VersionCompare} $0 "1.3.0" $R0
         ${VersionCompare} $0 "2.0.0" $R1
@@ -226,10 +230,9 @@ Section "WinFSP" Section2
             ${OrIf} $R1 == 1
                 ${OrIf} $R1 == 0
                     # Incorrect WinSFP version (<1.4.0 or >=2.0.0)
-                    SetOutPath "$TEMP"
-                    File ${WINFSP_INSTALLER}
-                    ExecWait "msiexec /i ${WINFSP_INSTALLER}"
-                    Delete ${WINFSP_INSTALLER}
+                    !insertmacro InstallWINFSP
+        ${Else}
+            ${UnselectSection} ${Section2} 
         ${EndIf}
     ${EndIf}
 SectionEnd
