@@ -103,12 +103,12 @@ Function .onInit
     MessageBox MB_OK|MB_ICONEXCLAMATION "Parsec is running. Please close it first!" /SD IDOK
     Abort
 
-  notRunning: 
+  notRunning:
     ReadRegStr $R0 HKLM \
     "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PROGRAM_NAME}" \
     "UninstallString"
     StrCmp $R0 "" done
- 
+
     MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
     "${PROGRAM_NAME} is already installed. $\n$\nClick `OK` to remove the \
     previous version or `Cancel` to cancel this upgrade." \
@@ -147,13 +147,13 @@ FunctionEnd
 #     ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{FF66E9F6-83E7-3A3E-AF14-8DE9A809A6A4}" "Version"
 #     IfErrors 0 +2
 #         StrCpy $R0 "-1"
-# 
+#
 #     Push $R1
 #     ClearErrors
 #     ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{9BE518E6-ECC6-35A9-88E4-87755C07200F}" "Version"
 #     IfErrors 0 VSRedistInstalled
 #         StrCpy $R1 "-1"
-# 
+#
 #     StrCmp $R0 "-1" +3 0
 #         Exch $R0
 #         Goto VSRedistInstalled
@@ -164,7 +164,7 @@ FunctionEnd
 #         Push "-1"
 #     VSRedistInstalled:
 # FunctionEnd
-# 
+#
 # Function VCRedistMessage
 #     Call CheckVCRedist2008
 #     Pop $R0
@@ -210,26 +210,29 @@ Section "Parsec Secure Cloud Sharing" Section1
     !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
-!macro TestWINFSP
-    ClearErrors
-    ReadRegStr $0 HKCR "Installer\Dependencies\WinFsp" "Version"
-    ${IfNot} ${Errors}
-        # WinFSP is installed
-        ${VersionCompare} $0 "1.3.0" $R0
-        ${VersionCompare} $0 "2.0.0" $R1
-        ${If} $R0 == 1
-            ${AndIf} $R1 == 2
-                # Correct WinFSP version, unselecting
-                !insertmacro UnSelectSection ${Section2} 
-        ${EndIf}            
-    ${EndIf}
-!macroend
-
-Section "WinFSP" Section2
+!macro InstallWinFSP
     SetOutPath "$TEMP"
     File ${WINFSP_INSTALLER}
     ExecWait "msiexec /i ${WINFSP_INSTALLER}"
     Delete ${WINFSP_INSTALLER}
+!macroend
+
+Section "WinFSP" Section2
+    ClearErrors
+    ReadRegStr $0 HKCR "Installer\Dependencies\WinFsp" "Version"
+    ${If} ${Errors}
+      # WinFSP is not installed
+      !insertmacro InstallWinFSP
+    ${Else}
+        ${VersionCompare} $0 "1.3.0" $R0
+        ${VersionCompare} $0 "2.0.0" $R1
+        ${If} $R0 == 2
+            ${OrIf} $R1 == 1
+                ${OrIf} $R1 == 0
+                  # Incorrect WinSFP version (<1.4.0 or >=2.0.0)
+                  !insertmacro InstallWinFSP
+        ${EndIf}
+    ${EndIf}
 SectionEnd
 
 # Create parsec:// uri association.
@@ -281,7 +284,6 @@ LangString DESC_Section4 ${LANG_ENGLISH} "Add a link pointing to the mountpoint 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${Section1} $(DESC_Section1)
     !insertmacro MUI_DESCRIPTION_TEXT ${Section2} $(DESC_Section2)
-    !insertmacro TestWINFSP
     !insertmacro MUI_DESCRIPTION_TEXT ${Section3} $(DESC_Section3)
     !insertmacro MUI_DESCRIPTION_TEXT ${Section4} $(DESC_Section4)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
