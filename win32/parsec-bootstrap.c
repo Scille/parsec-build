@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
         "import os, sys\n"
         "from parsec.cli import cli\n"
         "os.environ['SENTRY_URL'] = 'https://863e60bbef39406896d2b7a5dbd491bb@sentry.io/1212848'\n"
-        "os.environ['FUSE_LIBRARY_PATH'] = '%programfiles(x86)%\\\\WinFsp\\\\bin\\\\winfsp-x64.dll'\n"
         "os.makedirs(os.path.expandvars('%APPDATA%\\\\parsec'), exist_ok=True)\n"
         "log_file = os.path.expandvars('%APPDATA%\\\\parsec\\\\parsec-core.log')\n"
         "cli(['core', 'gui', '--log-level', 'INFO', '--log-file', log_file])\n"
