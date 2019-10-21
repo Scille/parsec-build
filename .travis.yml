@@ -9,7 +9,6 @@ services:
 install:
 - openssl aes-256-cbc -K $encrypted_e80ce9d13f4b_key -iv $encrypted_e80ce9d13f4b_iv
   -in snap/.snapcraft/travis_snapcraft.cfg -out snap/.snapcraft/snapcraft.cfg -d
-- locale-gen en_US.UTF-8
 - cat version
 - PARSEC_VERSION=`cat version | cut -c -32`
 - cd snap
