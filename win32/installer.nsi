@@ -3,7 +3,6 @@
 
 !addplugindir nsis_plugins
 !addincludedir nsis_plugins
-!include "nsProcess.nsh"
 !include "WordFunc.nsh"
 
 # Script version; displayed when running the installer
@@ -96,14 +95,12 @@ Var StartMenuFolder
 
 # Check for running Parsec instance.
 Function .onInit
-  StrCpy $INSTDIR "C:\Program Files\Parsec"
-
-  ${nsProcess::FindProcess} "parsec.exe" $R0
-  IntCmp $R0 1 0 0 notRunning
-    MessageBox MB_OK|MB_ICONEXCLAMATION "Parsec is running. Please close it first!" /SD IDOK
-    Abort
-
-  notRunning:
+    System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "parsec-cloud") i .R0'
+    IntCmp $R0 0 notRunning
+        System::Call 'kernel32::CloseHandle(i $R0)'
+        MessageBox MB_OK|MB_ICONEXCLAMATION "Parsec is running. Please close it first" /SD IDOK
+        Abort
+    notRunning:
     ReadRegStr $R0 HKLM \
     "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PROGRAM_NAME}" \
     "UninstallString"
