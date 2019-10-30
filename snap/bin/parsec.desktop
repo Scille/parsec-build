@@ -1,10 +1,11 @@
 [Desktop Entry]
 Name=Parsec
 Comment=Secure cloud framework
-Exec=parsec
+Exec=parsec %u
 Icon=${SNAP}/meta/gui/icon.png
 Type=Application
 Terminal=false
 StartupNotify=false
 StartupWMClass=Parsec
 Categories=Network
+MimeType=x-scheme-handler/parsec;
