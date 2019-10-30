@@ -11,4 +11,4 @@ PYTHON=${SNAP}/venv/bin/python
 # and fallback to xdg-open which is fine given we use snap in classic mode
 # (i.e. without sandbox).
 unset SNAP
-$PYTHON -I -m parsec.cli core gui --log-level=INFO --log-file=$LOG_FILE
+$PYTHON -I -m parsec.cli core gui --log-level=INFO --log-file=$LOG_FILE $@
