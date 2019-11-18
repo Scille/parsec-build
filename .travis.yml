@@ -12,8 +12,7 @@ install:
 - cat version
 - PARSEC_VERSION=`cat version | cut -c -32`
 - cd snap
-- sed -i '2d' snapcraft.yaml
-- sed -i "2iversion:\ $PARSEC_VERSION" snapcraft.yaml
+- sed -i "s/__PARSEC_VERSION__/$PARSEC_VERSION/g" snapcraft.yaml
 - cd ..
 - git clone https://github.com/Scille/parsec-cloud.git
 - cd parsec-cloud

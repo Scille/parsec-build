@@ -1,9 +1,10 @@
 name: parsec
-version: VERSION
+version: __PARSEC_VERSION__
 summary: Secure cloud framework # 79 char long summary
 description: |
   Parsec is an open-source cloud-based application that allow simple yet
   cryptographically secure file hosting.
+base: core18
 type: app
 
 confinement: classic # classic is needed to have fuse working
@@ -27,43 +28,19 @@ parts:
     source: "./bin"
 
   parsec-core:
-    plugin: dump
+    plugin: python
+    python-version: python3
     source: https://github.com/Scille/parsec-cloud.git
+    source-depth: 1
+    source-tag: __PARSEC_VERSION__
     override-pull: |
       snapcraftctl pull
-      git pull
-      git checkout $SNAPCRAFT_PROJECT_VERSION
-      echo __version__ = \"$SNAPCRAFT_PROJECT_VERSION\" >> parsec/_version.py
-    override-build: |
-      echo 'PYTHON VERSION: ' `python3.6 --version` `which python3.6`
-
-      PYTHON_HOST_PATH=$SNAPCRAFT_PART_INSTALL/venv/bin/
-
-      python3.6 -m venv $SNAPCRAFT_PART_INSTALL/venv --without-pip
-
-      . $SNAPCRAFT_PART_INSTALL/venv/bin/activate
-      locale-gen en_US.UTF-8 &&
-      export LANG="en_US.UTF-8"
-      export LANGUAGE="en_US:en"
-      export LC_ALL="en_US.UTF-8"
-      curl https://bootstrap.pypa.io/get-pip.py | python3.6
-      echo "PIP VERSION: " `pip --version`
-      pip install .[core] --target $SNAPCRAFT_PART_INSTALL/venv/lib/python3.6/site-packages
-
-      sed -i "s#$SNAPCRAFT_PART_INSTALL#\$SNAP#g" $PYTHON_HOST_PATH/../pyvenv.cfg
-      sed -i "s#$SNAPCRAFT_PART_INSTALL#\$SNAP#g" `find $PYTHON_HOST_PATH -type f`
-      rm $PYTHON_HOST_PATH/python3.6
-      ln -s ../../usr/bin/python3.6 $PYTHON_HOST_PATH/python3.6
+      # Ugly hack given snapcraft doesn't support extra requirements...
+      sed -i "s#install_requires=requirements#install_requires=requirements + extra_requirements['core']#g" setup.py
     stage-packages:
-      - python3.6
-      - python3.6-dev
+      - libfuse2
       - libxext6
       - libx11-6
       - libx11-xcb1
-    build-packages:
-      - curl
-      - locales
-      - python3.6-venv
-      - python3
-      - python3-virtualenv
-      - python3-pip
+      - libfreetype6
+      - libpng16-16
