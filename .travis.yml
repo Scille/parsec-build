@@ -7,7 +7,6 @@ branches:
   - master
 env:
   global:
-    - secure: RL1L9lg3eJ3vLQq69d8QnwHqIkIzGHrDIaHWMGhRV/YS5Dgi3feFj5H1j68XA7JsOOH0xXR0NUcBGjglozKIQ0zPvHpa30NZMNV+5Ea+Np742H/Ph0pjNGx55SwR+5eGyh+7eESWOAnVcDYUtV6aHhuLxmH/wvRKJrU+vykYqXBWJ0deH7j1c1Pr5aH8/8Hti9/H2RiNKTXHGvHT/LEmOsLW0HwGcJ8oRwc/jovaA6YLSU0hMhFBbs0f1yeIycUf4K7Lt2VXQgt5JiMn8D7eafJjK/ojEQvTYkC9tflPEixfntQG2yvDmre6HfwZBksy4j1xmuBIf7pNFlEAxd4iNQ7Zrv2Dvvd0vaeT1KuXcW6v1M2dPGAiKhvG/EPTl6chDKl7VtpoDOv0Tzgd2VL8gdoETFRPsAS2QDD/UnsgDrPqLDN37/0WPqvIe2nPBpqEzyyLpZ9naY7rMRYOCXlX8deK+Q0TF+XnCA5vaFxsyURntD8NiqSr4PSqD/ZWOzQVw9CtptQ6BIqadVHi8bn9zt4sOfOJyiRqJN4EPRhCbtA87i/iodHepqKONKsdw+eUUnlOpmvDvq7LqfdSB/vsRHkZd1it45Lhw2h1aLSQb3V/tqobLLmKO3DwjxH7+2FDg7p02EKLgpnqLYFflKcLzJGTFlKzW5LjefPT0tfGMEo=
     # SNAPCRAFT_IMAGE_INFO - build traceability
     # SNAPCRAFT_BUILD_INFO - build manifest and security notifications (https://snapcraft.io/blog/introducing-developer-notifications-for-snap-security-updates)
     # SNAPCRAFT_ENABLE_SILENT_REPORT - automated sentry reports for the snapcraft team
@@ -24,8 +23,6 @@ addons:
      channel: stable
 
 install:
-- openssl aes-256-cbc -K $encrypted_e80ce9d13f4b_key -iv $encrypted_e80ce9d13f4b_iv
-  -in snap/.snapcraft/travis_snapcraft.cfg -out snap/.snapcraft/snapcraft.cfg -d
 - PARSEC_VERSION=`cat version | cut -c -32`
 - echo "PARSEC_VERSION=$PARSEC_VERSION"
 - sed -i "s/__PARSEC_VERSION__/$PARSEC_VERSION/g" snap/snapcraft.yaml
