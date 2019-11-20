@@ -1,40 +1,47 @@
 language: bash
+dist: xenial
+
+
 branches:
   only:
   - master
 env:
-  secure: RL1L9lg3eJ3vLQq69d8QnwHqIkIzGHrDIaHWMGhRV/YS5Dgi3feFj5H1j68XA7JsOOH0xXR0NUcBGjglozKIQ0zPvHpa30NZMNV+5Ea+Np742H/Ph0pjNGx55SwR+5eGyh+7eESWOAnVcDYUtV6aHhuLxmH/wvRKJrU+vykYqXBWJ0deH7j1c1Pr5aH8/8Hti9/H2RiNKTXHGvHT/LEmOsLW0HwGcJ8oRwc/jovaA6YLSU0hMhFBbs0f1yeIycUf4K7Lt2VXQgt5JiMn8D7eafJjK/ojEQvTYkC9tflPEixfntQG2yvDmre6HfwZBksy4j1xmuBIf7pNFlEAxd4iNQ7Zrv2Dvvd0vaeT1KuXcW6v1M2dPGAiKhvG/EPTl6chDKl7VtpoDOv0Tzgd2VL8gdoETFRPsAS2QDD/UnsgDrPqLDN37/0WPqvIe2nPBpqEzyyLpZ9naY7rMRYOCXlX8deK+Q0TF+XnCA5vaFxsyURntD8NiqSr4PSqD/ZWOzQVw9CtptQ6BIqadVHi8bn9zt4sOfOJyiRqJN4EPRhCbtA87i/iodHepqKONKsdw+eUUnlOpmvDvq7LqfdSB/vsRHkZd1it45Lhw2h1aLSQb3V/tqobLLmKO3DwjxH7+2FDg7p02EKLgpnqLYFflKcLzJGTFlKzW5LjefPT0tfGMEo=
-services:
-- docker
+  global:
+    - secure: RL1L9lg3eJ3vLQq69d8QnwHqIkIzGHrDIaHWMGhRV/YS5Dgi3feFj5H1j68XA7JsOOH0xXR0NUcBGjglozKIQ0zPvHpa30NZMNV+5Ea+Np742H/Ph0pjNGx55SwR+5eGyh+7eESWOAnVcDYUtV6aHhuLxmH/wvRKJrU+vykYqXBWJ0deH7j1c1Pr5aH8/8Hti9/H2RiNKTXHGvHT/LEmOsLW0HwGcJ8oRwc/jovaA6YLSU0hMhFBbs0f1yeIycUf4K7Lt2VXQgt5JiMn8D7eafJjK/ojEQvTYkC9tflPEixfntQG2yvDmre6HfwZBksy4j1xmuBIf7pNFlEAxd4iNQ7Zrv2Dvvd0vaeT1KuXcW6v1M2dPGAiKhvG/EPTl6chDKl7VtpoDOv0Tzgd2VL8gdoETFRPsAS2QDD/UnsgDrPqLDN37/0WPqvIe2nPBpqEzyyLpZ9naY7rMRYOCXlX8deK+Q0TF+XnCA5vaFxsyURntD8NiqSr4PSqD/ZWOzQVw9CtptQ6BIqadVHi8bn9zt4sOfOJyiRqJN4EPRhCbtA87i/iodHepqKONKsdw+eUUnlOpmvDvq7LqfdSB/vsRHkZd1it45Lhw2h1aLSQb3V/tqobLLmKO3DwjxH7+2FDg7p02EKLgpnqLYFflKcLzJGTFlKzW5LjefPT0tfGMEo=
+    # SNAPCRAFT_IMAGE_INFO - build traceability
+    # SNAPCRAFT_BUILD_INFO - build manifest and security notifications (https://snapcraft.io/blog/introducing-developer-notifications-for-snap-security-updates)
+    # SNAPCRAFT_ENABLE_SILENT_REPORT - automated sentry reports for the snapcraft team
+    - SNAPCRAFT_ENABLE_SILENT_REPORT: y
+    - SNAPCRAFT_BUILD_INFO: y
+    - SNAPCRAFT_IMAGE_INFO: '{"build_url": "$TRAVIS_BUILD_URL"}'
+
+addons:
+  snaps:
+   - name: snapcraft
+     channel: stable
+     confinement: classic
+   - name: lxd
+     channel: stable
+
 install:
 - openssl aes-256-cbc -K $encrypted_e80ce9d13f4b_key -iv $encrypted_e80ce9d13f4b_iv
   -in snap/.snapcraft/travis_snapcraft.cfg -out snap/.snapcraft/snapcraft.cfg -d
-- cat version
 - PARSEC_VERSION=`cat version | cut -c -32`
-- cd snap
-- sed -i '2d' snapcraft.yaml
-- sed -i "2iversion:\ $PARSEC_VERSION" snapcraft.yaml
-- cd ..
-- git clone https://github.com/Scille/parsec-cloud.git
-- cd parsec-cloud
-- curl -sL https://sentry.io/get-cli/ | bash
-- export SENTRY_ORG="scille"
-- sentry-cli --auth-token $SENTRY_RELEASE_TOKEN releases new -p parsec $PARSEC_VERSION
-- sentry-cli --auth-token $SENTRY_RELEASE_TOKEN releases set-commits --auto $PARSEC_VERSION
-- cd ..
+- echo "PARSEC_VERSION=$PARSEC_VERSION"
+- sed -i "s/__PARSEC_VERSION__/$PARSEC_VERSION/g" snap/snapcraft.yaml
 
-script: |-
-  docker run -v $(pwd):$(pwd) --rm -t snapcore/snapcraft:stable sh -c "
-    apt update -qq &&
-    apt-get install -y software-properties-common &&
-    add-apt-repository -y ppa:deadsnakes/ppa &&
-    apt update -qq &&
-    cd $(pwd)/snap &&
-    snapcraft --version &&
-    snapcraft
-  "
+script:
+  - sudo /snap/bin/lxd.migrate -yes
+  - sudo /snap/bin/lxd waitready
+  - sudo /snap/bin/lxd init --auto
+  - cd snap
+  - sudo snapcraft --version
+  - sudo snapcraft --use-lxd
+  - cd ..
+
 before_deploy:
 - export TRAVIS_TAG=$PARSEC_VERSION
+
 deploy:
   - provider: releases
     file: snap/parsec_*.snap
@@ -42,6 +49,10 @@ deploy:
     api_key:
       secure: Q6gmlwEr9Rj/2Ir5OqA6bhCKMjJCNcr+not8q83ephTWyGPTgebhV8yrl00utlfuLuafK88UcWWpmuCzDKcI8rjfiOXVQzMSoqVtJjr/Dcgge7mha3Ec3IzRpAwrg73KwuUhrV/W5Efu1nHaBGA4WYLrd4sFboscdTrFnaJq4wgTVM1qP9vLRXRzuHlM/Hrt/gj9e99DqB0n3DWT9T4ew9haFhY/nn8cyLztU4FwjqZXCqpSqAj3MviFe6AIYg97Xmhilm/4H4JJFGkcBnGhajqoGd0vXKo9Bg8EnmlDMGgCmKw9s2fk0sa5w4umKApLxhdKuejhjXpEodQxJXuRbp2v4bCoreSeIuks7U5kAADxUZoeZznKopYMbgMTkD/20ZKAoCuRHqsJMivDif9g8I3wD63Dik+bXnNtI3GN6DgCr4H3okMC4tjr9BQ7mLY1kR9OxnETRRjGX87Th61XvPWtPOxDcGZ/9MKGBWcRfohvlzhR2+asfJuvza7rof9k4WcBR6oi5Y70ZC74lUJP5EQFgxblbOhboXm36DnC95x7+x8rDK5dcivJFiGFyO2P3uIVdKjgVZxgTt29L4+vZoSWN0AekNPvVNUMlyCnCkGNQj6GOrWpE4zMINvt6Z4qromkukZv13WHRPZQ4h6sDWUWd5pSXbBn2ZRnUHBWj3E=
     skip_cleanup: true
+  - provider: snap
+    snap: snap/parsec_*.snap
+    channel: edge
+    skip_cleanup: true
   - provider: script
-    script: bash snap/deploy_snap.sh
+    script: bash deploy_sentry.sh
     skip_cleanup: true
