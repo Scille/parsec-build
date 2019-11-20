@@ -23,7 +23,7 @@ addons:
      channel: stable
 
 install:
-- PARSEC_VERSION=`cat version | cut -c -32`
+- export PARSEC_VERSION=`cat version | cut -c -32`
 - echo "PARSEC_VERSION=$PARSEC_VERSION"
 - sed -i "s/__PARSEC_VERSION__/$PARSEC_VERSION/g" snap/snapcraft.yaml
 
