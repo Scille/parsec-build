@@ -242,10 +242,10 @@ SectionEnd
 
 Section "Add a link pointing to the mountpoint in Windows Explorer" Section4
     DeleteRegKey HKCU "Software\Classes\CLSID\{${APPGUID}}"
-    DeleteRegKey HKCU "Software\Wow6432Node\CLSID\{${APPGUID}}"
+    DeleteRegKey HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}"
     DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}}"
-    DeleteRegKey HKCU "Software\Microsoft\CurrentVersion\Explorer\Desktop\HideDesktopIcons\NewStartPanel\{${APPGUID}}"
-
+    DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel\{${APPGUID}}"
+    ClearErrors
     WriteRegStr HKCU "Software\Classes\CLSID\{${APPGUID}}" "" "Parsec"
     WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}" "SortOrderIndex" 0x42
     WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}" "System.IsPinnedToNamespaceTree" 0x1
@@ -318,9 +318,9 @@ Section Uninstall
 
   # Explorer shortcut keys potentially set by the application's settings
   DeleteRegKey HKCU "Software\Classes\CLSID\{${APPGUID}}"
-  DeleteRegKey HKCU "Software\Wow6432Node\CLSID\{${APPGUID}"
+  DeleteRegKey HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}"
   DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}"
-  DeleteRegKey HKCU "Software\Microsoft\CurrentVersion\Explorer\Desktop\HideDesktopIcons\NewStartPanel\{${APPGUID}"
+  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel\{${APPGUID}"
 
 SectionEnd
 
