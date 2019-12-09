@@ -12,6 +12,7 @@
 !define PROGRAM_NAME "Parsec"
 !define PROGRAM_WEB_SITE "http://parsec.cloud"
 !define APPGUID "6C37F945-7EFC-480A-A444-A6D44A3D107F"
+!define MOUNTPOINT "$PROFILE\Parsec_mnt"
 
 # Detect version from file
 !define BUILD_DIR "build"
@@ -198,6 +199,17 @@ Section "Parsec Secure Cloud Sharing" Section1
     SetOutPath "$INSTDIR"
     WriteIniStr "$INSTDIR\homepage.url" "InternetShortcut" "URL" "${PROGRAM_WEB_SITE}"
 
+    FileOpen $1 "${MOUNTPOINT}\desktop.ini" w
+    FileWrite $1 "[.ShellClassInfo]$\r$\n"
+    FileWrite $1 "IconFile=$INSTDIR\parsec.exe$\r$\n"
+    FileWrite $1 "IconIndex=0$\r$\n"
+    FileWrite $1 "InfoTip=Secure Cloud Framework$\r$\n"
+    FileWrite $1 "NoSharing=1$\r$\n"
+    FileClose $1
+
+    SetFileAttributes "${MOUNTPOINT}" SYSTEM
+    SetFileAttributes "${MOUNTPOINT}\desktop.ini" SYSTEM | HIDDEN | READONLY
+
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
         SetShellVarContext all
         CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
@@ -255,7 +267,7 @@ Section "Add a link pointing to the mountpoint in Windows Explorer" Section4
     WriteRegExpandStr HKCU "Software\Classes\CLSID\{${APPGUID}}\InProcServer32" "" "%SYSTEMROOT%\system32\shell32.dll"
     WriteRegStr HKCU "Software\Classes\CLSID\{${APPGUID}}\Instance" "CLSID" "{0E5AAE11-A475-4c5b-AB00-C66DE400274E}"
     WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "Attributes" 0x11
-    WriteRegStr HKCU "Software\Classes\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "TargetFolderPath" "$APPDATA\Parsec\mnt"
+    WriteRegStr HKCU "Software\Classes\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "TargetFolderPath" "${MOUNTPOINT}"
     WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}\ShellFolder" "Attributes" 0xf080004d
     WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}\ShellFolder" "FolderValueFlags" 0x28
 
@@ -266,7 +278,7 @@ Section "Add a link pointing to the mountpoint in Windows Explorer" Section4
     WriteRegExpandStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\InProcServer32" "" "%SYSTEMROOT%\SysWow64\shell32.dll"
     WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\Instance" "CLSID" "{0E5AAE11-A475-4c5b-AB00-C66DE400274E}"
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "Attributes" 0x11
-    WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "TargetFolderPath" "$APPDATA\Parsec\mnt"
+    WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "TargetFolderPath" "${MOUNTPOINT}"
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\ShellFolder" "Attributes" 0xf080004d
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\ShellFolder" "FolderValueFlags" 0x28
 
