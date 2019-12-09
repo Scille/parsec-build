@@ -12,7 +12,7 @@
 !define PROGRAM_NAME "Parsec"
 !define PROGRAM_WEB_SITE "http://parsec.cloud"
 !define APPGUID "6C37F945-7EFC-480A-A444-A6D44A3D107F"
-!define MOUNTPOINT "$PROFILE\Parsec_mnt"
+!define MOUNTPOINT "$PROFILE\Parsec"
 
 # Detect version from file
 !define BUILD_DIR "build"
