@@ -246,10 +246,8 @@ Section "Add a link pointing to the mountpoint in Windows Explorer" Section4
     DeleteRegKey HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}"
     DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}}"
     DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel\{${APPGUID}}"
-    DeleteRegKey HKCR "Software\Classes\CLSID\{${APPGUID}}"
-    DeleteRegKey HKCR "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}"
     ClearErrors
-   
+
     WriteRegStr HKCU "Software\Classes\CLSID\{${APPGUID}}" "" "Parsec"
     WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}" "SortOrderIndex" 0x42
     WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}" "System.IsPinnedToNamespaceTree" 0x1
@@ -260,7 +258,7 @@ Section "Add a link pointing to the mountpoint in Windows Explorer" Section4
     WriteRegStr HKCU "Software\Classes\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "TargetFolderPath" "$APPDATA\Parsec\mnt"
     WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}\ShellFolder" "Attributes" 0xf080004d
     WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}\ShellFolder" "FolderValueFlags" 0x28
-   
+
     WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}" "" "Parsec"
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}" "SortOrderIndex" 0x42
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}" "System.IsPinnedToNamespaceTree" 0x1
@@ -271,7 +269,7 @@ Section "Add a link pointing to the mountpoint in Windows Explorer" Section4
     WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "TargetFolderPath" "$APPDATA\Parsec\mnt"
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\ShellFolder" "Attributes" 0xf080004d
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\ShellFolder" "FolderValueFlags" 0x28
-   
+
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}}" "" "Parsec"
 
     WriteRegDWORD HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel" "{${APPGUID}}" 0x1
