@@ -204,6 +204,7 @@ Section "Parsec Secure Cloud Sharing" Section1
         CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Parsec.lnk" "$INSTDIR\parsec.exe"
         CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Website.lnk" "$INSTDIR\homepage.url"
         CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall Parsec.lnk" ${PROGRAM_UNINST_FILENAME}
+        SetShellVarContext current
     !insertmacro MUI_STARTMENU_WRITE_END
 SectionEnd
 
@@ -333,7 +334,7 @@ Section Uninstall
         Delete "$SMPROGRAMS\$StartMenuFolder\Parsec Website.lnk"
         RmDir "$SMPROGRAMS\$StartMenuFolder"
         DeleteRegKey /ifempty HKCR "Software\Parsec"
-
+        SetShellVarContext current
     Delete "$DESKTOP\Parsec.lnk"
 
     # Delete registry keys.
