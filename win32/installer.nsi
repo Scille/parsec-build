@@ -266,7 +266,7 @@ Section "Add a link pointing to the mountpoint in Windows Explorer" Section4
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "Attributes" 0x11
     WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "TargetFolderPath" "$APPDATA\Parsec\mnt"
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\ShellFolder" "Attributes" 0xf080004d
-    WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\ShellFolder" "FolderValueFlags" 0x28
+    WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\ShellFolder" "FolderValueFlags" 0x28
 
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}}" "" "Parsec"
 
