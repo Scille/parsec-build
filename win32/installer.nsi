@@ -261,17 +261,6 @@ Section "Add a link pointing to the mountpoint in Windows Explorer" Section4
     WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}\ShellFolder" "Attributes" 0xf080004d
     WriteRegDWORD HKCU "Software\Classes\CLSID\{${APPGUID}}\ShellFolder" "FolderValueFlags" 0x28
    
-    WriteRegStr HKCR "CLSID\{${APPGUID}}" "" "Parsec"
-    WriteRegDWORD HKCR "CLSID\{${APPGUID}}" "SortOrderIndex" 0x42
-    WriteRegDWORD HKCR "CLSID\{${APPGUID}}" "System.IsPinnedToNamespaceTree" 0x1
-    WriteRegStr HKCR "CLSID\{${APPGUID}}\DefaultIcon" "" "$INSTDIR\parsec.exe,0"
-    WriteRegExpandStr HKCR "CLSID\{${APPGUID}}\InProcServer32" "" "%SYSTEMROOT%\system32\shell32.dll"
-    WriteRegStr HKCR "CLSID\{${APPGUID}}\Instance" "CLSID" "{0E5AAE11-A475-4c5b-AB00-C66DE400274E}"
-    WriteRegDWORD HKCR "CLSID\{${APPGUID}}\Instance\InitPropertyBag" "Attributes" 0x11
-    WriteRegStr HKCR "CLSID\{${APPGUID}}\Instance\InitPropertyBag" "TargetFolderPath" "$APPDATA\Parsec\mnt"
-    WriteRegDWORD HKCR "CLSID\{${APPGUID}}\ShellFolder" "Attributes" 0xf080004d
-    WriteRegDWORD HKCR "CLSID\{${APPGUID}}\ShellFolder" "FolderValueFlags" 0x28   
-   
     WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}" "" "Parsec"
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}" "SortOrderIndex" 0x42
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}" "System.IsPinnedToNamespaceTree" 0x1
@@ -282,17 +271,6 @@ Section "Add a link pointing to the mountpoint in Windows Explorer" Section4
     WriteRegStr HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "TargetFolderPath" "$APPDATA\Parsec\mnt"
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\ShellFolder" "Attributes" 0xf080004d
     WriteRegDWORD HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}\ShellFolder" "FolderValueFlags" 0x28
-
-    WriteRegStr HKCR "Wow6432Node\CLSID\{${APPGUID}}" "" "Parsec"
-    WriteRegDWORD HKCR "Wow6432Node\CLSID\{${APPGUID}}" "SortOrderIndex" 0x42
-    WriteRegDWORD HKCR "Wow6432Node\CLSID\{${APPGUID}}" "System.IsPinnedToNamespaceTree" 0x1
-    WriteRegStr HKCR "Wow6432Node\CLSID\{${APPGUID}}\DefaultIcon" "" "$INSTDIR\parsec.exe,0"
-    WriteRegExpandStr HKCR "Wow6432Node\CLSID\{${APPGUID}}\InProcServer32" "" "%SYSTEMROOT%\SysWow64\shell32.dll"
-    WriteRegStr HKCR "Wow6432Node\CLSID\{${APPGUID}}\Instance" "CLSID" "{0E5AAE11-A475-4c5b-AB00-C66DE400274E}"
-    WriteRegDWORD HKCR "Wow6432Node\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "Attributes" 0x11
-    WriteRegStr HKCR "Wow6432Node\CLSID\{${APPGUID}}\Instance\InitPropertyBag" "TargetFolderPath" "$APPDATA\Parsec\mnt"
-    WriteRegDWORD HKCR "Wow6432Node\CLSID\{${APPGUID}}\ShellFolder" "Attributes" 0xf080004d
-    WriteRegDWORD HKCR "Wow6432Node\CLSID\{${APPGUID}}\ShellFolder" "FolderValueFlags" 0x28   
    
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}}" "" "Parsec"
 
