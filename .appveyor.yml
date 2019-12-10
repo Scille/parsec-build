@@ -41,7 +41,7 @@ deploy:
     auth_token:
       secure: lyNNIFX5PY8L2IxvWOp+dbc+oCXJ0dkc7jgqgc4BVfAT5RyeP6kalg/08dbKzOuU
     artifact: installer
-    draft: false
+    draft: true
   # - provider: NuGet
   #   server: https://push.chocolatey.org/
   #   api_key:

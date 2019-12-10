@@ -46,6 +46,7 @@ deploy:
     api_key:
       secure: Q6gmlwEr9Rj/2Ir5OqA6bhCKMjJCNcr+not8q83ephTWyGPTgebhV8yrl00utlfuLuafK88UcWWpmuCzDKcI8rjfiOXVQzMSoqVtJjr/Dcgge7mha3Ec3IzRpAwrg73KwuUhrV/W5Efu1nHaBGA4WYLrd4sFboscdTrFnaJq4wgTVM1qP9vLRXRzuHlM/Hrt/gj9e99DqB0n3DWT9T4ew9haFhY/nn8cyLztU4FwjqZXCqpSqAj3MviFe6AIYg97Xmhilm/4H4JJFGkcBnGhajqoGd0vXKo9Bg8EnmlDMGgCmKw9s2fk0sa5w4umKApLxhdKuejhjXpEodQxJXuRbp2v4bCoreSeIuks7U5kAADxUZoeZznKopYMbgMTkD/20ZKAoCuRHqsJMivDif9g8I3wD63Dik+bXnNtI3GN6DgCr4H3okMC4tjr9BQ7mLY1kR9OxnETRRjGX87Th61XvPWtPOxDcGZ/9MKGBWcRfohvlzhR2+asfJuvza7rof9k4WcBR6oi5Y70ZC74lUJP5EQFgxblbOhboXm36DnC95x7+x8rDK5dcivJFiGFyO2P3uIVdKjgVZxgTt29L4+vZoSWN0AekNPvVNUMlyCnCkGNQj6GOrWpE4zMINvt6Z4qromkukZv13WHRPZQ4h6sDWUWd5pSXbBn2ZRnUHBWj3E=
     skip_cleanup: true
+    draft: true
   - provider: snap
     snap: snap/parsec_*.snap
     channel: edge
