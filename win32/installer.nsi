@@ -199,6 +199,8 @@ Section "Parsec Secure Cloud Sharing" Section1
     SetOutPath "$INSTDIR"
     WriteIniStr "$INSTDIR\homepage.url" "InternetShortcut" "URL" "${PROGRAM_WEB_SITE}"
 
+    CreateDirectory "${MOUNTPOINT}"
+
     FileOpen $1 "${MOUNTPOINT}\desktop.ini" w
     FileWrite $1 "[.ShellClassInfo]$\r$\n"
     FileWrite $1 "IconFile=$INSTDIR\parsec.exe$\r$\n"
