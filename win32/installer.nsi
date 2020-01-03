@@ -210,7 +210,7 @@ Section "Parsec Secure Cloud Sharing" Section1
     FileClose $1
 
     SetFileAttributes "${MOUNTPOINT}" SYSTEM
-    SetFileAttributes "${MOUNTPOINT}\desktop.ini" SYSTEM | HIDDEN | READONLY
+    SetFileAttributes "${MOUNTPOINT}\desktop.ini" SYSTEM|HIDDEN|READONLY
 
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
         SetShellVarContext all
