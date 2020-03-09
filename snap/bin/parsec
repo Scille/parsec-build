@@ -11,6 +11,9 @@ PYTHON=${SNAP}/usr/bin/python3
 # variable for this. Given we are going to unset $SNAP, we replace it
 # by $SNAPCRAFT_STAGE which is also used by this script.
 export SNAPCRAFT_STAGE=$SNAP
+# *Sob* sitecustomize.py has changed and now also requires
+# $SNAPCRAFT_PART_INSTALL to be defined...
+export SNAPCRAFT_PART_INSTALL=$SNAP
 
 # SNAP env variable is used by Qt to determine we are within a sandbox
 # and hence should use xdg-desktop-portal. However this is broken
